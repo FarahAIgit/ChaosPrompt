@@ -18,7 +18,7 @@ def get_random_words():
         r = requests.get(RANDOM_WORD_URL, timeout=5)
         if r.status_code == 200:
             return r.json()
-        return ["ghost", "signal", "static"]  # fallback
+        return ["ghost", "signal", "static"]
     except:
         return ["shadow", "glass", "orbit"]
 
@@ -32,7 +32,6 @@ def get_related_words(word):
     except:
         return []
 
-# Human descriptors for fallback or flavor
 human_adj = [
     "mysterious", "ethereal", "surreal", "dreamlike", "eerie",
     "otherworldly", "luminous", "ageless", "enigmatic", "soft-lit"
@@ -63,25 +62,27 @@ def make_prompt(person_mode=False):
 
     return prompt
 
-# Initialize session state for the prompt
+# Initialize session state
 if "prompt" not in st.session_state:
     st.session_state.prompt = ""
 
-# UI toggle
 person_mode = st.checkbox("Center the prompt around a person", value=False)
 
-# Generate button
+# Generate Prompt button
 if st.button("Generate Prompt"):
     st.session_state.prompt = make_prompt(person_mode)
 
-# Display prompt if it exists
+# Display prompt and copy button
 if st.session_state.prompt:
     st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=100)
-
-    # Working copy button
-    if st.button("Copy Prompt to Clipboard"):
-        st.experimental_set_clipboard(st.session_state.prompt)
-        st.success("Prompt copied to clipboard!")
+    
+    # One-click copy button using HTML + JS
+    escaped_prompt = st.session_state.prompt.replace("`", "\\`").replace("\n", "\\n")
+    st.markdown(
+        f'<button style="padding:5px 10px; margin-top:5px; cursor:pointer;" '
+        f'onclick="navigator.clipboard.writeText(`{escaped_prompt}`)">Copy Prompt to Clipboard</button>',
+        unsafe_allow_html=True
+    )
 
 # Footer
 st.markdown(
