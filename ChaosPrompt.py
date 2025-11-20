@@ -8,20 +8,45 @@ st.write("A surreal prompt generator powered by chaos, poetry, and nonsense.")
 
 # Expanded local word list
 all_words = [
-    "ghost","signal","shadow","orbit","mist","void","pulse","echo","aura",
-    "fractal","glitch","neon","crystal","smoke","flare","vortex","ripple",
-    "haze","cinder","lumen","rift","spiral","ember","drift","cobweb","gloom",
-    "spark","shard","lattice","hollow","veil","frost","bloom","drone","plasma",
-    "ember","quartz","mirror","catalyst","nether","eclipse","solstice","chimera",
-    "twilight","maelstrom","echoes","spectrum","rift","abyss","pyre","temple",
-    "glyph","phantom","hollow","mist","vein","spire","crux","cipher","dusk",
-    "lantern","veil","fog","cavern","tomb","pulse","spire","gossamer","labyrinth",
-    "cinder","basilisk","drift","zenith","aether","mantle","rift","cavern","specter",
-    "ember","lattice","obsidian","haze","gloom","fracture","paradox","myriad",
-    "rift","eclipse","nocturne","arcane","twist","rift","prism","phantasm","pulse",
-    "veil","shadow","lumen","crevice","abyss","glimmer","rift","crypt","frost",
-    "echo","spire","shard","labyrinth","phantom","aura","vortex","oblivion"
+"abyss","aether","aura","arcane","astral","altar","amber","anomaly","apparition","arboreal",
+"aurora","ashen","artifact","basilisk","blight","bramble","bloom","banshee","barrow","beacon",
+"catacomb","cinder","cavern","cipher","crystal","cobweb","corvus","chaos","chasm","cavernous",
+"crypt","crux","catalyst","crevice","crescent","cobble","cavern","drift","dusk","dust","dome",
+"drone","echo","ember","eclipse","ether","ethereal","effigy","fracture","fractal","fog","flare",
+"frost","gossamer","gloom","glyph","glimmer","hollow","haze","haunt","hive","horizon","hollowed",
+"incubus","iris","infernal","illusion","labyrinth","lantern","lattice","lament","loom","lumen",
+"maelstrom","mist","mirage","myriad","neon","nether","nocturne","obelisk","obsidian","orb","orbit",
+"oasis","omens","ombre","phantom","prism","pulse","pyre","quartz","rift","spire","specter","spectrum",
+"shard","signal","solstice","shadow","spire","shroud","sable","tomb","twilight","veil","vortex",
+"vein","void","wraith","warp","web","whisper","zenith","zephyr","zeal","arcadia","ascent","blooming",
+"bastion","blaze","brimstone","cavernous","cinder","cortex","corruption","crimson","cryptic","cusp",
+"dawn","drizzle","driftwood","dread","echoes","eerie","emberlight","entropic","ephemeral","equinox",
+"ethos","evermore","exile","fallow","fen","feral","fissure","flare","foggy","forlorn","fringe","gale",
+"gloomy","grimoire","grove","harrow","haze","hollowed","horizon","hymn","icebound","incense","infinity",
+"iris","labyrinthine","lurk","luminous","maelstrom","marrow","miasma","misty","moonglow","murk",
+"mythos","nebulous","nightfall","nocturnal","omen","opal","orbital","otherworldly","palace","paradox",
+"penumbra","phantasm","pinnacle","plume","portal","prismatic","pulse","pyre","quagmire","quartz","radiance",
+"rift","roost","ruin","sable","scepter","shadowed","shimmer","shrouded","silhouette","spire","spectral",
+"spiral","starlit","stasis","stygian","sublime","summit","temple","tenebrous","thicket","thrall","tombstone",
+"tranquil","twilight","umbra","undergrowth","veil","verdant","void","vortex","waning","wraith","zephyr",
+"aberration","abyssal","acolyte","alchemy","altar","apparition","arcadia","auric","bastion","blight",
+"blaze","bramble","brooding","cataclysm","catacomb","chasm","coven","cursed","crag","crevasse",
+"cryptic","cynosure","darkling","decay","descent","divination","draconian","dread","echoic","eldritch",
+"empyreal","enigma","entropic","ephemeral","ethereal","fallow","fissure","forlorn","fractured","gleam",
+"graven","grim","haunted","hallowed","haze","helix","hex","hollow","illusory","immortal","incantation",
+"incense","infinity","labyrinth","lament","luminous","lurking","maelstrom","marrow","mire","mirage",
+"myriad","necrotic","nether","nocturne","obelisk","occult","omniscient","ominous","oracular","orbital",
+"otherworldly","palimpsest","penumbra","phantasm","phosphorescent","plume","portal","prismatic","pulse",
+"pyre","quagmire","quartz","raven","relic","rift","runic","sanctum","scepter","shadowed","shard","shroud",
+"spectral","spiral","starlit","stasis","stygian","sublime","summit","temple","tenebrous","thicket","thrall",
+"tomb","tranquil","twilight","umbra","undergrowth","veil","verdant","vortex","waning","whisper","wraith",
+"zenith","zephyr","zoetic","abyssion","alabaster","arcology","astrium","bloodmoon","celestia","cimmerian",
+"cognizance","crystalline","darkspire","dawnlight","ebon","eclipse","empyrean","fathom","gloaming","grimoire",
+"hallowed","hyperion","incubus","ionis","lore","luminesce","lurid","mausoleum","nebulon","nexus","noctis",
+"obelion","phantasia","pyxis","reverie","sable","silica","somnium","sorcery","spectra","tenebris","umbrage",
+"vellichor","voidborn","wraithborne","xenolith","zenobia","zircon"
 ]
+
 
 # Expanded human descriptors
 human_adj = [
@@ -91,3 +116,4 @@ st.markdown(
     "Use of this generator is free but if you find it useful please consider donating a little; [Donate via Kofi](https://ko-fi.com/farahai)",
     unsafe_allow_html=True
 )
+
