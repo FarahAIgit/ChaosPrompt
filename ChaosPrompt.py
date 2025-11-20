@@ -44,8 +44,12 @@ random_descriptors = [
     "fractured space", "cosmic distortion"
 ]
 
-def make_prompt(person_mode=False):
-    # Pick 9 random words from expanded list to allow full de-duplication
+# MidJourney parameters
+mj_stylize_values = [50, 100, 250, 500, 625, 750, 1000]
+mj_sref_values = [1, 2, 3, 4, 5, 10]
+
+def make_prompt(person_mode=False, add_mj_params=True):
+    # Pick 9 random words from expanded list
     fragments = random.sample(all_words, k=9)
 
     # Assign body, hints, and person words without overlap
@@ -56,19 +60,24 @@ def make_prompt(person_mode=False):
         # person_flavour must be unique from body and hints
         available_for_person = fragments[6:]
         person_flavour = random.choice(available_for_person) if available_for_person else random.choice(human_adj)
-        prompt = (
+        prompt_body = (
             f"A {person_flavour} person standing among {', '.join(body_words)}, "
             f"with hints of {', '.join(hints_words)}, "
             f"{random.choice(random_descriptors)}."
         )
     else:
-        prompt = (
+        prompt_body = (
             f"A {body_words[0]} {body_words[1]} emerging from {body_words[2]}, "
             f"surrounded by {', '.join(hints_words)}, "
             f"{random.choice(random_descriptors)}."
         )
 
-    return prompt
+    if add_mj_params:
+        s_val = random.choice(mj_stylize_values)
+        sref_val = random.choice(mj_sref_values)
+        prompt_body += f" --s {s_val} --sref {sref_val}"
+
+    return prompt_body
 
 # Initialize session state
 if "prompt" not in st.session_state:
@@ -77,9 +86,12 @@ if "prompt" not in st.session_state:
 # Person toggle
 person_mode = st.checkbox("Center the prompt around a person", value=False)
 
+# MidJourney toggle
+add_mj = st.checkbox("Add random MidJourney --s and --sref parameters", value=True)
+
 # Generate Prompt button
 if st.button("Generate Prompt"):
-    st.session_state.prompt = make_prompt(person_mode)
+    st.session_state.prompt = make_prompt(person_mode, add_mj_params=add_mj)
 
 # Display prompt
 if st.session_state.prompt:
