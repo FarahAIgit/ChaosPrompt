@@ -1,14 +1,18 @@
 import streamlit as st
 import random
-from random_word import RandomWords
 
 st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
 
 st.title("Chaos Prompt Generator")
 st.write("A surreal prompt generator powered by chaos, poetry, and nonsense.")
 
-# Initialize RandomWords
-r = RandomWords()
+# Local word list for fully random prompts
+all_words = [
+    "ghost","signal","shadow","orbit","mist","void","pulse","echo","aura",
+    "fractal","glitch","neon","crystal","smoke","flare","vortex","ripple",
+    "haze","flare","cinder","lumen","rift","spiral","ember","drift","cobweb",
+    "gloom","spark","shard","lattice","hollow","veil","frost","bloom","drone"
+]
 
 # Human descriptors and random ending descriptors
 human_adj = [
@@ -22,38 +26,28 @@ random_descriptors = [
     "overexposed highlights", "vibrant reflections", "twisted perspective"
 ]
 
-# Extra filler words for chaos
-filler_words = ["shadow", "glass", "orbit", "echo", "signal", "mist", "void", "fractal", "pulse", "aura"]
-
 def make_prompt(person_mode=False):
-    # Generate 8 random words
-    try:
-        base_words = [r.get_random_word() for _ in range(8)]
-    except:
-        # Fallback if API fails
-        base_words = ["ghost", "signal", "shadow", "orbit", "mist", "void", "pulse", "echo"]
+    # Pick 8 random words from local list
+    fragments = random.sample(all_words, k=8)
 
-    # Add a few filler words for extra randomness
-    fragments = list(set(base_words + random.sample(filler_words, k=3)))
-    random.shuffle(fragments)
-
-    # Pick body and hints words
+    # Separate body and hints words
     body_words = fragments[:3]
-    hints_words = fragments[3:6] if len(fragments) > 3 else []
+    hints_words = fragments[3:6]
 
+    # Pick random descriptor for ending
     ending_descriptor = random.choice(random_descriptors)
 
     if person_mode:
-        person_flavour = random.choice(fragments) if fragments else random.choice(human_adj)
+        person_flavour = random.choice(all_words) if all_words else random.choice(human_adj)
         prompt = (
             f"A {person_flavour} person standing among {', '.join(body_words)}, "
-            f"with hints of {', '.join(hints_words) if hints_words else 'ambient chaos'}, "
+            f"with hints of {', '.join(hints_words)}, "
             f"{ending_descriptor}."
         )
     else:
         prompt = (
             f"A {body_words[0]} {body_words[1]} emerging from {body_words[2]}, "
-            f"surrounded by {', '.join(hints_words) if hints_words else 'ambient chaos'}, "
+            f"surrounded by {', '.join(hints_words)}, "
             f"{ending_descriptor}."
         )
 
