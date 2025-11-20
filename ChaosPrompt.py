@@ -45,32 +45,27 @@ random_descriptors = [
 ]
 
 def make_prompt(person_mode=False):
-    # Pick 8 random words from expanded list
-    fragments = random.sample(all_words, k=8)
+    # Pick 9 random words from expanded list to allow full de-duplication
+    fragments = random.sample(all_words, k=9)
 
-    # Separate body and hints words
+    # Assign body, hints, and person words without overlap
     body_words = fragments[:3]
     hints_words = fragments[3:6]
 
-    # Pick random descriptor for ending
-    ending_descriptor = random.choice(random_descriptors)
-
-    # Remove used words to avoid repetition
-    used_words = body_words + hints_words
-    available_for_person = [w for w in fragments if w not in used_words]
-
     if person_mode:
+        # person_flavour must be unique from body and hints
+        available_for_person = fragments[6:]
         person_flavour = random.choice(available_for_person) if available_for_person else random.choice(human_adj)
         prompt = (
             f"A {person_flavour} person standing among {', '.join(body_words)}, "
             f"with hints of {', '.join(hints_words)}, "
-            f"{ending_descriptor}."
+            f"{random.choice(random_descriptors)}."
         )
     else:
         prompt = (
             f"A {body_words[0]} {body_words[1]} emerging from {body_words[2]}, "
             f"surrounded by {', '.join(hints_words)}, "
-            f"{ending_descriptor}."
+            f"{random.choice(random_descriptors)}."
         )
 
     return prompt
