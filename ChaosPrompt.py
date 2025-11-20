@@ -74,15 +74,12 @@ if st.button("Generate Prompt"):
 
 # Display prompt and copy button
 if st.session_state.prompt:
-    st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=100)
+    prompt_area = st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=100)
     
-    # One-click copy button using HTML + JS
-    escaped_prompt = st.session_state.prompt.replace("`", "\\`").replace("\n", "\\n")
-    st.markdown(
-        f'<button style="padding:5px 10px; margin-top:5px; cursor:pointer;" '
-        f'onclick="navigator.clipboard.writeText(`{escaped_prompt}`)">Copy Prompt to Clipboard</button>',
-        unsafe_allow_html=True
-    )
+    # Select all / Copy workaround
+    if st.button("Select All Text for Copying"):
+        # This just focuses the text area for manual copy
+        st.text_area("Copy this:", value=st.session_state.prompt, height=100)
 
 # Footer
 st.markdown(
