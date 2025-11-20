@@ -44,9 +44,8 @@ random_descriptors = [
     "fractured space", "cosmic distortion"
 ]
 
-# MidJourney parameters
+# MidJourney stylize values
 mj_stylize_values = [50, 100, 250, 500, 625, 750, 1000]
-mj_sref_values = [1, 2, 3, 4, 5, 10]
 
 def make_prompt(person_mode=False, add_mj_params=True):
     # Pick 9 random words from expanded list
@@ -74,7 +73,8 @@ def make_prompt(person_mode=False, add_mj_params=True):
 
     if add_mj_params:
         s_val = random.choice(mj_stylize_values)
-        sref_val = random.choice(mj_sref_values)
+        # Generate a random 10-digit number for --sref
+        sref_val = random.randint(1000000000, 9999999999)
         prompt_body += f" --s {s_val} --sref {sref_val}"
 
     return prompt_body
