@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 import random
 
+st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
+
 st.title("Chaos Prompt Generator")
 st.write("A surreal prompt generator powered by chaos, poetry, nonsense.")
 
@@ -46,9 +48,7 @@ def make_prompt(person_mode=False):
     random.shuffle(fragments)
 
     if person_mode:
-        # Try using one related word as personality or aesthetic flavour
         person_flavour = random.choice(flavour) if flavour else random.choice(human_adj)
-
         prompt = (
             f"A {person_flavour} person standing among {fragments[0]}, {fragments[1]}, and {fragments[2]}, "
             f"with hints of {', '.join(fragments[3:]) if len(fragments) > 3 else 'ambient static'}, "
@@ -63,12 +63,22 @@ def make_prompt(person_mode=False):
 
     return prompt
 
-
 # UI toggle
 person_mode = st.checkbox("Center the prompt around a person", value=False)
 
+# Generate button
 if st.button("Generate Prompt"):
-    st.success(make_prompt(person_mode))
+    prompt = make_prompt(person_mode)
+    
+    # Display the prompt in a text area so it's selectable
+    st.text_area("Your Generated Prompt:", value=prompt, height=100)
+    
+    # One-click copy button using HTML + JS
+    st.markdown(
+        f'<button style="padding:5px 10px; margin-top:5px; cursor:pointer;" '
+        f'onclick="navigator.clipboard.writeText(`{prompt}`)">Copy to clipboard</button>',
+        unsafe_allow_html=True
+    )
 
 # Footer
 st.markdown(
@@ -79,7 +89,3 @@ st.markdown(
      "Use of this generator is free but if you find it useful please consider donating a little; [Donate via Kofi](https://ko-fi.com/farahai)",
     unsafe_allow_html=True
 )
-
-
-
-
