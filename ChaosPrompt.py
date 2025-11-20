@@ -63,19 +63,24 @@ def make_prompt(person_mode=False):
 
     return prompt
 
+# Initialize session state for the prompt
+if "prompt" not in st.session_state:
+    st.session_state.prompt = ""
+
 # UI toggle
 person_mode = st.checkbox("Center the prompt around a person", value=False)
 
 # Generate button
 if st.button("Generate Prompt"):
-    prompt = make_prompt(person_mode)
-    
-    # Display the prompt in a text area so it’s selectable
-    st.text_area("Your Generated Prompt:", value=prompt, height=100)
-    
+    st.session_state.prompt = make_prompt(person_mode)
+
+# Display prompt if it exists
+if st.session_state.prompt:
+    st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=100)
+
     # Working copy button
     if st.button("Copy Prompt to Clipboard"):
-        st.experimental_set_clipboard(prompt)
+        st.experimental_set_clipboard(st.session_state.prompt)
         st.success("Prompt copied to clipboard!")
 
 # Footer
@@ -84,6 +89,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 st.markdown(
-     "Use of this generator is free but if you find it useful please consider donating a little; [Donate via Kofi](https://ko-fi.com/farahai)",
+    "Use of this generator is free but if you find it useful please consider donating a little; [Donate via Kofi](https://ko-fi.com/farahai)",
     unsafe_allow_html=True
 )
