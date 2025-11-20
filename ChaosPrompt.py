@@ -5,7 +5,7 @@ import random
 st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
 
 st.title("Chaos Prompt Generator")
-st.write("A surreal prompt generator powered by chaos, poetry, nonsense.")
+st.write("A surreal prompt generator powered by chaos, poetry, and nonsense.")
 
 # Random Word API URL
 RANDOM_WORD_URL = "https://random-word-api.herokuapp.com/word?number=3"
@@ -70,15 +70,13 @@ person_mode = st.checkbox("Center the prompt around a person", value=False)
 if st.button("Generate Prompt"):
     prompt = make_prompt(person_mode)
     
-    # Display the prompt in a text area so it's selectable
+    # Display the prompt in a text area so it’s selectable
     st.text_area("Your Generated Prompt:", value=prompt, height=100)
     
-    # One-click copy button using HTML + JS
-    st.markdown(
-        f'<button style="padding:5px 10px; margin-top:5px; cursor:pointer;" '
-        f'onclick="navigator.clipboard.writeText(`{prompt}`)">Copy to clipboard</button>',
-        unsafe_allow_html=True
-    )
+    # Working copy button
+    if st.button("Copy Prompt to Clipboard"):
+        st.experimental_set_clipboard(prompt)
+        st.success("Prompt copied to clipboard!")
 
 # Footer
 st.markdown(
