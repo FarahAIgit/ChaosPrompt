@@ -125,5 +125,9 @@ st.markdown(
     "Created by [@Farah_ai_](https://x.com/Farah_ai_)", unsafe_allow_html=True
 )
 st.markdown(
+    "If you find this app useful please consider donating and help support me improve the app further [Donate via Kofi](https://ko-fi.com/farahai)", unsafe_allow_html=True
+)
+st.markdown(
     "*~ Let the chaos guide your creations ~*", unsafe_allow_html=True
 )
+
