@@ -8,7 +8,7 @@ st.title("Chaos Prompt Generator")
 st.write("A surreal prompt generator powered by chaos, poetry, and nonsense.")
 
 # Random Word API URL
-RANDOM_WORD_URL = "https://random-word-api.herokuapp.com/word?number=3"
+RANDOM_WORD_URL = "https://random-word-api.herokuapp.com/word?number=5"
 
 # Datamuse API
 DATAMUSE_URL = "https://api.datamuse.com/words?ml="
@@ -18,9 +18,9 @@ def get_random_words():
         r = requests.get(RANDOM_WORD_URL, timeout=5)
         if r.status_code == 200:
             return r.json()
-        return ["ghost", "signal", "static"]
+        return ["ghost", "signal", "static", "shadow", "orbit"]
     except:
-        return ["shadow", "glass", "orbit"]
+        return ["shadow", "glass", "orbit", "echo", "pulse"]
 
 def get_related_words(word):
     try:
@@ -44,28 +44,41 @@ random_descriptors = [
 ]
 
 def make_prompt(person_mode=False):
-    base_words = get_random_words()
+    # Get more base words for variety
+    base_words = get_random_words() + get_random_words()  # 10 words total
+    base_words = list(set(base_words))  # remove duplicates
+
     trigger_word = random.choice(base_words)
     related = get_related_words(trigger_word)
 
-    flavour = random.sample(related, k=min(len(related), random.randint(1, 3))) if related else []
-    fragments = base_words + flavour
+    # Sample 2-3 related words
+    flavour = random.sample(related, k=min(len(related), random.randint(2, 3))) if related else []
+
+    # Extra random filler words to add variety
+    filler = random.sample(["shadow", "glass", "orbit", "echo", "signal", "mist", "void", "fractal", "pulse", "aura"], k=3)
+
+    # Combine all fragments and remove duplicates
+    fragments = list(set(base_words + flavour + filler))
     random.shuffle(fragments)
 
-    # Pick random descriptor for the end
+    # Pick separate words for "body" and "hints of"
+    body_words = fragments[:3]
+    hints_words = fragments[3:6] if len(fragments) > 3 else []
+
+    # Random descriptor for the ending
     ending_descriptor = random.choice(random_descriptors)
 
     if person_mode:
         person_flavour = random.choice(flavour) if flavour else random.choice(human_adj)
         prompt = (
-            f"A {person_flavour} person standing among {fragments[0]}, {fragments[1]}, and {fragments[2]}, "
-            f"with hints of {', '.join(fragments[3:]) if len(fragments) > 3 else 'ambient chaos'}, "
+            f"A {person_flavour} person standing among {', '.join(body_words)}, "
+            f"with hints of {', '.join(hints_words) if hints_words else 'ambient chaos'}, "
             f"{ending_descriptor}."
         )
     else:
         prompt = (
-            f"A {fragments[0]} {fragments[1]} emerging from {fragments[2]}, "
-            f"surrounded by {', '.join(fragments[3:]) if len(fragments) > 3 else 'ambient chaos'}, "
+            f"A {body_words[0]} {body_words[1]} emerging from {body_words[2]}, "
+            f"surrounded by {', '.join(hints_words) if hints_words else 'ambient chaos'}, "
             f"{ending_descriptor}."
         )
 
