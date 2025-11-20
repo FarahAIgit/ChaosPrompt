@@ -72,14 +72,9 @@ person_mode = st.checkbox("Center the prompt around a person", value=False)
 if st.button("Generate Prompt"):
     st.session_state.prompt = make_prompt(person_mode)
 
-# Display prompt and copy button
+# Display prompt
 if st.session_state.prompt:
-    prompt_area = st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=100)
-    
-    # Select all / Copy workaround
-    if st.button("Select All Text for Copying"):
-        # This just focuses the text area for manual copy
-        st.text_area("Copy this:", value=st.session_state.prompt, height=100)
+    st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=100)
 
 # Footer
 st.markdown(
