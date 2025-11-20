@@ -3,12 +3,55 @@ import random
 
 st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
 
-st.title("Chaos Prompt Generator")
-st.write("A surreal prompt generator powered by chaos, poetry, and nonsense.")
+# --- CSS Styling ---
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+        font-family: 'Courier New', monospace;
+        background-image: url('https://i.imgur.com/3vXl8U8.jpg');  /* subtle eldritch background */
+        background-size: cover;
+        background-attachment: fixed;
+    }
+    h1, h2, h3 {
+        color: #ff8c00;
+        font-family: 'Courier New', monospace;
+    }
+    .stTextArea textarea {
+        background: rgba(0,0,0,0.6);
+        border: 2px solid #444;
+        box-shadow: 0 0 10px #ff8c00;
+        color: #e0e0e0;
+        font-family: 'Courier New', monospace;
+        font-size: 16px;
+    }
+    .stButton>button {
+        background-color: #2b2b2b;
+        color: #f5f5f5;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+        cursor: pointer;
+    }
+    .stCheckbox>div {
+        color: #f5f5f5;
+        font-family: 'Courier New', monospace;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-# 500-word surreal/eldritch/chaotic list
-all_words = [
-"abyss","aether","aura","arcane","astral","altar","amber","anomaly","apparition","arboreal",
+# --- Headings ---
+st.markdown("### 🔮 Chaos Prompt Generator 🔮")
+st.markdown("*A surreal, eldritch prompt engine for MidJourney and beyond*")
+st.markdown("---")
+
+# --- Word Pools ---
+all_words = ["abyss","aether","aura","arcane","astral","altar","amber","anomaly","apparition","arboreal",
 "aurora","ashen","artifact","basilisk","blight","bramble","bloom","banshee","barrow","beacon",
 "catacomb","cinder","cavern","cipher","crystal","cobweb","corvus","chaos","chasm","cavernous",
 "crypt","crux","catalyst","crevice","crescent","cobble","cavern","drift","dusk","dust","dome",
@@ -18,45 +61,26 @@ all_words = [
 "maelstrom","mist","mirage","myriad","neon","nether","nocturne","obelisk","obsidian","orb","orbit",
 "oasis","omens","ombre","phantom","prism","pulse","pyre","quartz","rift","spire","specter","spectrum",
 "shard","signal","solstice","shadow","spire","shroud","sable","tomb","twilight","veil","vortex",
-"vein","void","wraith","warp","web","whisper","zenith","zephyr","zoetic","abyssion","alabaster",
-"arcology","astrium","bloodmoon","celestia","cimmerian","cognizance","crystalline","darkspire",
-"dawnlight","ebon","eclipse","empyrean","fathom","gloaming","grimoire","hallowed","hyperion",
-"incubus","ionis","lore","luminesce","lurid","mausoleum","nebulon","nexus","noctis","obelion",
-"phantasia","pyxis","reverie","sable","silica","somnium","sorcery","spectra","tenebris","umbrage",
-"vellichor","voidborn","wraithborne","xenolith","zenobia","zircon"
-]
+"vein","void","wraith","warp","web","whisper","zenith","zephyr","zoetic"]
 
-# Human descriptors for person-centered prompts
-human_adj = [
-    "mysterious", "ethereal", "surreal", "dreamlike", "eerie",
-    "otherworldly", "luminous", "ageless", "enigmatic", "soft-lit",
-    "phantasmic", "haunted", "celestial", "gossamer", "arcane",
-    "shadowed", "lucid", "ominous", "astral", "haunting"
-]
+human_adj = ["mysterious", "ethereal", "surreal", "dreamlike", "eerie","otherworldly",
+"luminous", "ageless", "enigmatic", "soft-lit","phantasmic","haunted","celestial","gossamer",
+"arcane","shadowed","lucid","ominous","astral","haunting"]
 
-# Random descriptors for endings
-random_descriptors = [
-    "cinematic lighting", "strange dreamlike atmosphere", "glitching colors",
-    "floating objects", "soft shadows", "fractal patterns", "foggy ambiance",
-    "overexposed highlights", "vibrant reflections", "twisted perspective",
-    "distorted reality", "surreal reflections", "mirrored dimensions", "ethereal glow",
-    "phantasmic hues", "floating geometry", "shifting shadows", "liquid light",
-    "fractured space", "cosmic distortion"
-]
+random_descriptors = ["cinematic lighting", "strange dreamlike atmosphere", "glitching colors",
+"floating objects", "soft shadows", "fractal patterns", "foggy ambiance", "overexposed highlights",
+"vibrant reflections", "twisted perspective","distorted reality", "surreal reflections",
+"mirrored dimensions", "ethereal glow","phantasmic hues","floating geometry","shifting shadows",
+"liquid light","fractured space","cosmic distortion"]
 
-# MidJourney stylize values
 mj_stylize_values = [50, 100, 250, 500, 625, 750, 1000]
 
 def make_prompt(person_mode=False, add_mj_params=True):
-    # Pick 9 random words from expanded list
     fragments = random.sample(all_words, k=9)
-
-    # Assign body, hints, and person words without overlap
     body_words = fragments[:3]
     hints_words = fragments[3:6]
 
     if person_mode:
-        # person_flavour must be unique from body and hints
         available_for_person = fragments[6:]
         person_flavour = random.choice(available_for_person) if available_for_person else random.choice(human_adj)
         prompt_body = (
@@ -73,36 +97,33 @@ def make_prompt(person_mode=False, add_mj_params=True):
 
     if add_mj_params:
         s_val = random.choice(mj_stylize_values)
-        # Generate a random 10-digit number for --sref
         sref_val = random.randint(1000000000, 9999999999)
         prompt_body += f" --s {s_val} --sref {sref_val}"
 
     return prompt_body
 
-# Initialize session state
+# --- Session state ---
 if "prompt" not in st.session_state:
     st.session_state.prompt = ""
 
-# Person toggle
-person_mode = st.checkbox("Center the prompt around a person", value=False)
+# --- Layout columns ---
+col1, col2 = st.columns([1,2])
 
-# MidJourney toggle
-add_mj = st.checkbox("Add random MidJourney --s and --sref parameters", value=True)
+with col1:
+    person_mode = st.checkbox("Center the prompt around a person", value=False)
+    add_mj = st.checkbox("Add random MidJourney --s and --sref parameters", value=True)
+    if st.button("Generate Prompt"):
+        st.session_state.prompt = make_prompt(person_mode, add_mj_params=add_mj)
 
-# Generate Prompt button
-if st.button("Generate Prompt"):
-    st.session_state.prompt = make_prompt(person_mode, add_mj_params=add_mj)
+with col2:
+    if st.session_state.prompt:
+        st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=150)
 
-# Display prompt
-if st.session_state.prompt:
-    st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=120)
-
-# Footer
+# --- Footer ---
+st.markdown("---")
 st.markdown(
-    "Created by [@Farah_ai_](https://x.com/Farah_ai_)",
-    unsafe_allow_html=True
+    "Created by [@Farah_ai_](https://x.com/Farah_ai_)", unsafe_allow_html=True
 )
 st.markdown(
-    "Use of this generator is free but if you find it useful please consider donating a little; [Donate via Kofi](https://ko-fi.com/farahai)",
-    unsafe_allow_html=True
+    "*~ Let the chaos guide your creations ~*", unsafe_allow_html=True
 )
