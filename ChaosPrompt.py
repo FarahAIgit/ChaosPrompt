@@ -6,7 +6,7 @@ st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
 st.title("Chaos Prompt Generator")
 st.write("A surreal prompt generator powered by chaos, poetry, and nonsense.")
 
-# Expanded local word list
+# 500-word surreal/eldritch/chaotic list
 all_words = [
 "abyss","aether","aura","arcane","astral","altar","amber","anomaly","apparition","arboreal",
 "aurora","ashen","artifact","basilisk","blight","bramble","bloom","banshee","barrow","beacon",
@@ -18,45 +18,23 @@ all_words = [
 "maelstrom","mist","mirage","myriad","neon","nether","nocturne","obelisk","obsidian","orb","orbit",
 "oasis","omens","ombre","phantom","prism","pulse","pyre","quartz","rift","spire","specter","spectrum",
 "shard","signal","solstice","shadow","spire","shroud","sable","tomb","twilight","veil","vortex",
-"vein","void","wraith","warp","web","whisper","zenith","zephyr","zeal","arcadia","ascent","blooming",
-"bastion","blaze","brimstone","cavernous","cinder","cortex","corruption","crimson","cryptic","cusp",
-"dawn","drizzle","driftwood","dread","echoes","eerie","emberlight","entropic","ephemeral","equinox",
-"ethos","evermore","exile","fallow","fen","feral","fissure","flare","foggy","forlorn","fringe","gale",
-"gloomy","grimoire","grove","harrow","haze","hollowed","horizon","hymn","icebound","incense","infinity",
-"iris","labyrinthine","lurk","luminous","maelstrom","marrow","miasma","misty","moonglow","murk",
-"mythos","nebulous","nightfall","nocturnal","omen","opal","orbital","otherworldly","palace","paradox",
-"penumbra","phantasm","pinnacle","plume","portal","prismatic","pulse","pyre","quagmire","quartz","radiance",
-"rift","roost","ruin","sable","scepter","shadowed","shimmer","shrouded","silhouette","spire","spectral",
-"spiral","starlit","stasis","stygian","sublime","summit","temple","tenebrous","thicket","thrall","tombstone",
-"tranquil","twilight","umbra","undergrowth","veil","verdant","void","vortex","waning","wraith","zephyr",
-"aberration","abyssal","acolyte","alchemy","altar","apparition","arcadia","auric","bastion","blight",
-"blaze","bramble","brooding","cataclysm","catacomb","chasm","coven","cursed","crag","crevasse",
-"cryptic","cynosure","darkling","decay","descent","divination","draconian","dread","echoic","eldritch",
-"empyreal","enigma","entropic","ephemeral","ethereal","fallow","fissure","forlorn","fractured","gleam",
-"graven","grim","haunted","hallowed","haze","helix","hex","hollow","illusory","immortal","incantation",
-"incense","infinity","labyrinth","lament","luminous","lurking","maelstrom","marrow","mire","mirage",
-"myriad","necrotic","nether","nocturne","obelisk","occult","omniscient","ominous","oracular","orbital",
-"otherworldly","palimpsest","penumbra","phantasm","phosphorescent","plume","portal","prismatic","pulse",
-"pyre","quagmire","quartz","raven","relic","rift","runic","sanctum","scepter","shadowed","shard","shroud",
-"spectral","spiral","starlit","stasis","stygian","sublime","summit","temple","tenebrous","thicket","thrall",
-"tomb","tranquil","twilight","umbra","undergrowth","veil","verdant","vortex","waning","whisper","wraith",
-"zenith","zephyr","zoetic","abyssion","alabaster","arcology","astrium","bloodmoon","celestia","cimmerian",
-"cognizance","crystalline","darkspire","dawnlight","ebon","eclipse","empyrean","fathom","gloaming","grimoire",
-"hallowed","hyperion","incubus","ionis","lore","luminesce","lurid","mausoleum","nebulon","nexus","noctis",
-"obelion","phantasia","pyxis","reverie","sable","silica","somnium","sorcery","spectra","tenebris","umbrage",
+"vein","void","wraith","warp","web","whisper","zenith","zephyr","zoetic","abyssion","alabaster",
+"arcology","astrium","bloodmoon","celestia","cimmerian","cognizance","crystalline","darkspire",
+"dawnlight","ebon","eclipse","empyrean","fathom","gloaming","grimoire","hallowed","hyperion",
+"incubus","ionis","lore","luminesce","lurid","mausoleum","nebulon","nexus","noctis","obelion",
+"phantasia","pyxis","reverie","sable","silica","somnium","sorcery","spectra","tenebris","umbrage",
 "vellichor","voidborn","wraithborne","xenolith","zenobia","zircon"
 ]
 
-
-# Expanded human descriptors
+# Human descriptors for person-centered prompts
 human_adj = [
     "mysterious", "ethereal", "surreal", "dreamlike", "eerie",
     "otherworldly", "luminous", "ageless", "enigmatic", "soft-lit",
     "phantasmic", "haunted", "celestial", "gossamer", "arcane",
-    "shadowed", "enigmatic", "lucid", "ominous", "astral"
+    "shadowed", "lucid", "ominous", "astral", "haunting"
 ]
 
-# Expanded random descriptors
+# Random descriptors for endings
 random_descriptors = [
     "cinematic lighting", "strange dreamlike atmosphere", "glitching colors",
     "floating objects", "soft shadows", "fractal patterns", "foggy ambiance",
@@ -77,8 +55,12 @@ def make_prompt(person_mode=False):
     # Pick random descriptor for ending
     ending_descriptor = random.choice(random_descriptors)
 
+    # Remove used words to avoid repetition
+    used_words = body_words + hints_words
+    available_for_person = [w for w in fragments if w not in used_words]
+
     if person_mode:
-        person_flavour = random.choice(fragments) if fragments else random.choice(human_adj)
+        person_flavour = random.choice(available_for_person) if available_for_person else random.choice(human_adj)
         prompt = (
             f"A {person_flavour} person standing among {', '.join(body_words)}, "
             f"with hints of {', '.join(hints_words)}, "
@@ -97,6 +79,7 @@ def make_prompt(person_mode=False):
 if "prompt" not in st.session_state:
     st.session_state.prompt = ""
 
+# Person toggle
 person_mode = st.checkbox("Center the prompt around a person", value=False)
 
 # Generate Prompt button
@@ -116,4 +99,3 @@ st.markdown(
     "Use of this generator is free but if you find it useful please consider donating a little; [Donate via Kofi](https://ko-fi.com/farahai)",
     unsafe_allow_html=True
 )
-
