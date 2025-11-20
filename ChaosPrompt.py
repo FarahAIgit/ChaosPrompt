@@ -69,6 +69,10 @@ person_mode = st.checkbox("Center the prompt around a person", value=False)
 
 if st.button("Generate Prompt"):
     st.success(make_prompt(person_mode))
+    st.markdown(
+        f'<button onclick="navigator.clipboard.writeText(`{prompt}`)">Copy to clipboard</button>',
+        unsafe_allow_html=True
+    )
 
 # Footer
 st.markdown(
@@ -79,5 +83,6 @@ st.markdown(
      "Use of this generator is free but if you find it useful please consider donating a little; [Donate via Kofi](https://ko-fi.com/farahai)",
     unsafe_allow_html=True
 )
+
 
 
