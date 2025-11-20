@@ -2,8 +2,8 @@ import streamlit as st
 import requests
 import random
 
-st.title("Hybrid Random Prompt Generator")
-st.write("A surreal prompt generator powered by chaos, poetry, and optional human focus.")
+st.title("Chaos Prompt Generator")
+st.write("A surreal prompt generator powered by chaos, poetry, nonsense.")
 
 # Random Word API URL
 RANDOM_WORD_URL = "https://random-word-api.herokuapp.com/word?number=3"
@@ -72,6 +72,7 @@ if st.button("Generate Prompt"):
 
 # Footer
 st.markdown(
-    "Created by [@YourTwitterName](https://twitter.com/YourTwitterName)",
+    "Created by [@Farah_ai_](https://x.com/Farah_ai_)",
     unsafe_allow_html=True
 )
+
