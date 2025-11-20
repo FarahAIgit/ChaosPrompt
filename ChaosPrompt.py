@@ -37,27 +37,36 @@ human_adj = [
     "otherworldly", "luminous", "ageless", "enigmatic", "soft-lit"
 ]
 
+random_descriptors = [
+    "cinematic lighting", "strange dreamlike atmosphere", "glitching colors",
+    "floating objects", "soft shadows", "fractal patterns", "foggy ambiance",
+    "overexposed highlights", "vibrant reflections", "twisted perspective"
+]
+
 def make_prompt(person_mode=False):
     base_words = get_random_words()
     trigger_word = random.choice(base_words)
     related = get_related_words(trigger_word)
 
-    flavour = random.sample(related, k=min(len(related), random.randint(1, 2))) if related else []
+    flavour = random.sample(related, k=min(len(related), random.randint(1, 3))) if related else []
     fragments = base_words + flavour
     random.shuffle(fragments)
+
+    # Pick random descriptor for the end
+    ending_descriptor = random.choice(random_descriptors)
 
     if person_mode:
         person_flavour = random.choice(flavour) if flavour else random.choice(human_adj)
         prompt = (
             f"A {person_flavour} person standing among {fragments[0]}, {fragments[1]}, and {fragments[2]}, "
-            f"with hints of {', '.join(fragments[3:]) if len(fragments) > 3 else 'ambient static'}, "
-            f"cinematic lighting and surreal atmospheric tones."
+            f"with hints of {', '.join(fragments[3:]) if len(fragments) > 3 else 'ambient chaos'}, "
+            f"{ending_descriptor}."
         )
     else:
         prompt = (
             f"A {fragments[0]} {fragments[1]} emerging from {fragments[2]}, "
-            f"surrounded by {', '.join(fragments[3:]) if len(fragments) > 3 else 'ambient static'}, "
-            f"cinematic lighting and strange dreamlike atmosphere."
+            f"surrounded by {', '.join(fragments[3:]) if len(fragments) > 3 else 'ambient chaos'}, "
+            f"{ending_descriptor}."
         )
 
     return prompt
@@ -74,7 +83,7 @@ if st.button("Generate Prompt"):
 
 # Display prompt
 if st.session_state.prompt:
-    st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=100)
+    st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=120)
 
 # Footer
 st.markdown(
