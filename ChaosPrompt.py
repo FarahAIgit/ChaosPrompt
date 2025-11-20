@@ -38,4 +38,46 @@ human_adj = [
 
 def make_prompt(person_mode=False):
     base_words = get_random_words()
-    trig
+    trigger_word = random.choice(base_words)
+    related = get_related_words(trigger_word)
+
+    flavour = random.sample(related, k=min(len(related), random.randint(1, 2))) if related else []
+    fragments = base_words + flavour
+    random.shuffle(fragments)
+
+    if person_mode:
+        # Try using one related word as personality or aesthetic flavour
+        person_flavour = random.choice(flavour) if flavour else random.choice(human_adj)
+
+        prompt = (
+            f"A {person_flavour} person standing among {fragments[0]}, {fragments[1]}, and {fragments[2]}, "
+            f"with hints of {', '.join(fragments[3:]) if len(fragments) > 3 else 'ambient static'}, "
+            f"cinematic lighting and surreal atmospheric tones."
+        )
+    else:
+        prompt = (
+            f"A {fragments[0]} {fragments[1]} emerging from {fragments[2]}, "
+            f"surrounded by {', '.join(fragments[3:]) if len(fragments) > 3 else 'ambient static'}, "
+            f"cinematic lighting and strange dreamlike atmosphere."
+        )
+
+    return prompt
+
+
+# UI toggle
+person_mode = st.checkbox("Center the prompt around a person", value=False)
+
+if st.button("Generate Prompt"):
+    st.success(make_prompt(person_mode))
+
+# Footer
+st.markdown(
+    "Created by [@Farah_ai_](https://x.com/Farah_ai_)",
+    unsafe_allow_html=True
+)
+st.markdown(
+     "Use of this generator is free but if you find it useful please consider donating a little; [Donate via Kofi](https://ko-fi.com/farahai)",
+    unsafe_allow_html=True
+)
+
+
