@@ -74,5 +74,8 @@ if st.button("Generate Prompt"):
 st.markdown(
     "Created by [@Farah_ai_](https://x.com/Farah_ai_)",
     unsafe_allow_html=True
+    "Use of this generator is free but if you find it useful please consider donating a little; [Donate via Kofi](https://ko-fi.com/farahai)",
+    unsafe_allow_html=True
 )
+
 
