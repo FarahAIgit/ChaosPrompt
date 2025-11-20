@@ -6,28 +6,43 @@ st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
 st.title("Chaos Prompt Generator")
 st.write("A surreal prompt generator powered by chaos, poetry, and nonsense.")
 
-# Local word list for fully random prompts
+# Expanded local word list
 all_words = [
     "ghost","signal","shadow","orbit","mist","void","pulse","echo","aura",
     "fractal","glitch","neon","crystal","smoke","flare","vortex","ripple",
-    "haze","flare","cinder","lumen","rift","spiral","ember","drift","cobweb",
-    "gloom","spark","shard","lattice","hollow","veil","frost","bloom","drone"
+    "haze","cinder","lumen","rift","spiral","ember","drift","cobweb","gloom",
+    "spark","shard","lattice","hollow","veil","frost","bloom","drone","plasma",
+    "ember","quartz","mirror","catalyst","nether","eclipse","solstice","chimera",
+    "twilight","maelstrom","echoes","spectrum","rift","abyss","pyre","temple",
+    "glyph","phantom","hollow","mist","vein","spire","crux","cipher","dusk",
+    "lantern","veil","fog","cavern","tomb","pulse","spire","gossamer","labyrinth",
+    "cinder","basilisk","drift","zenith","aether","mantle","rift","cavern","specter",
+    "ember","lattice","obsidian","haze","gloom","fracture","paradox","myriad",
+    "rift","eclipse","nocturne","arcane","twist","rift","prism","phantasm","pulse",
+    "veil","shadow","lumen","crevice","abyss","glimmer","rift","crypt","frost",
+    "echo","spire","shard","labyrinth","phantom","aura","vortex","oblivion"
 ]
 
-# Human descriptors and random ending descriptors
+# Expanded human descriptors
 human_adj = [
     "mysterious", "ethereal", "surreal", "dreamlike", "eerie",
-    "otherworldly", "luminous", "ageless", "enigmatic", "soft-lit"
+    "otherworldly", "luminous", "ageless", "enigmatic", "soft-lit",
+    "phantasmic", "haunted", "celestial", "gossamer", "arcane",
+    "shadowed", "enigmatic", "lucid", "ominous", "astral"
 ]
 
+# Expanded random descriptors
 random_descriptors = [
     "cinematic lighting", "strange dreamlike atmosphere", "glitching colors",
     "floating objects", "soft shadows", "fractal patterns", "foggy ambiance",
-    "overexposed highlights", "vibrant reflections", "twisted perspective"
+    "overexposed highlights", "vibrant reflections", "twisted perspective",
+    "distorted reality", "surreal reflections", "mirrored dimensions", "ethereal glow",
+    "phantasmic hues", "floating geometry", "shifting shadows", "liquid light",
+    "fractured space", "cosmic distortion"
 ]
 
 def make_prompt(person_mode=False):
-    # Pick 8 random words from local list
+    # Pick 8 random words from expanded list
     fragments = random.sample(all_words, k=8)
 
     # Separate body and hints words
@@ -38,7 +53,7 @@ def make_prompt(person_mode=False):
     ending_descriptor = random.choice(random_descriptors)
 
     if person_mode:
-        person_flavour = random.choice(all_words) if all_words else random.choice(human_adj)
+        person_flavour = random.choice(fragments) if fragments else random.choice(human_adj)
         prompt = (
             f"A {person_flavour} person standing among {', '.join(body_words)}, "
             f"with hints of {', '.join(hints_words)}, "
