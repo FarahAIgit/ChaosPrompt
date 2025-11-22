@@ -21,6 +21,14 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+st.markdown(
+    """
+    <div style="text-align:center;">
+        <img src="https://YOUR_HEADER_IMAGE_HERE.png" style="width:90%; max-width:900px; margin-bottom:20px;">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 st.markdown("### 🔮 Chaos Prompt Generator 🔮")
 st.markdown("*A surreal prompt engine*")
@@ -232,4 +240,5 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
