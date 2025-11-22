@@ -1,133 +1,234 @@
 import streamlit as st
 import random
+import itertools
 
 st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
 
-# --- CSS Styling ---
+# ---------------------------
+# Minimal dark styling
+# ---------------------------
 st.markdown(
     """
     <style>
-    body {
-        background-color: #121212;
-        color: #e0e0e0;
-        font-family: 'Courier New', monospace;
-        background-image: url('https://i.imgur.com/3vXl8U8.jpg');  /* subtle eldritch background */
-        background-size: cover;
-        background-attachment: fixed;
-    }
-    h1, h2, h3 {
-        color: #ff8c00;
-        font-family: 'Courier New', monospace;
-    }
-    .stTextArea textarea {
-        background: rgba(0,0,0,0.6);
-        border: 2px solid #444;
-        box-shadow: 0 0 10px #ff8c00;
-        color: #e0e0e0;
-        font-family: 'Courier New', monospace;
-        font-size: 16px;
-    }
-    .stButton>button {
-        background-color: #2b2b2b;
-        color: #f5f5f5;
-        border-radius: 8px;
-        padding: 10px 20px;
-        font-weight: bold;
-        font-family: 'Courier New', monospace;
-        cursor: pointer;
-    }
-    .stCheckbox>div {
-        color: #f5f5f5;
-        font-family: 'Courier New', monospace;
+    body { background-color: #0d0d0f; color: #e8e6e3; font-family: 'Courier New', monospace; }
+    .stApp { min-height: 100vh; }
+    .stTextArea textarea { background: rgba(10,10,12,0.7); color: #e8e6e3; border: 1px solid #2f2f31; }
+    .stButton>button { background-color:#252427; color:#f2f0ef; border-radius:8px; padding:8px 14px; }
+    .block-container { padding: 1rem 2rem; }
+    h1,h2,h3 { color: #ff8c00; font-family: 'Courier New', monospace; }
+    .footer { color:#a8a6a3; font-size:12px; margin-top:8px; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown("### 🔮 Chaos Prompt Generator 🔮")
+st.markdown("*A surreal prompt engine — fully de-duplicated words, optional MidJourney params*")
+st.markdown("---")
+
+# ---------------------------
+# Clean person descriptor pool
+# ---------------------------
+PERSON_DESCRIPTORS = [
+    # Physical / Appearance
+    "ethereal figure", "lone wanderer", "cloaked silhouette", "veiled stranger",
+    "spectral woman", "shadow-touched figure", "war-torn survivor",
+    "cosmic pilgrim", "star-marked traveler", "quiet nomad", "wandering oracle",
+    "dusk-skinned silhouette", "pale drifter", "dusk-haired mystic",
+    "nocturnal figure", "storm-eyed visionary", "scar-lined wanderer",
+    "obsidian-haired stranger", "porcelain-skinned figure", "freckled phantom",
+    "raven-haired traveler", "luminous-faced wanderer", "forgotten outcast",
+    "haunted dreamer",
+
+    # Fashion / Style
+    "draped in tattered fabrics", "wrapped in celestial cloth",
+    "wearing layered darkwear", "armored in fractured metal",
+    "clad in flowing noir robes", "marked by arcane sigils",
+    "wearing worn leather", "dressed in dust-coated linens",
+    "adorned with subtle jewelry", "wrapped in weathered cloaks",
+    "marked by glowing threads",
+
+    # Roles / Archetypes
+    "the seeker", "the observer", "the initiate", "the wayfarer",
+    "the revenant", "the pilgrim", "the apostate", "the wanderer",
+    "the keeper", "the dream-carrier", "the archivist",
+    "the outlier", "the gatewatcher"
+]
+
+# ---------------------------
+# Programmatic generation of 1000 mixed words
+# (so we don't paste 1000 strings verbatim)
+# ---------------------------
+base_nouns = [
+    "abyss","aether","aura","altar","anomaly","apparition","astral","amber","arcane","atlas","ashen",
+    "animal","apple","artifact","autumn","bloom","bramble","barrow","beacon","brick","bridge",
+    "bubble","building","butterfly","breeze","boulder","bottle","cinder","cavern","cipher","crystal",
+    "cobweb","corvus","chaos","chasm","cloud","copper","candle","city","circle","cliff","clock",
+    "cloth","clover","cluster","cobalt","crown","drift","dusk","dust","dome","drone","dream",
+    "delta","diamond","dandelion","ember","eclipse","ether","effigy","energy","echo","engine","earth",
+    "elm","element","emotion","feather","field","forest","flare","foam","frost","fog","fabric",
+    "flower","flame","fawn","flux","gossamer","gloom","glyph","glimmer","garden","glass","ghost",
+    "gate","galaxy","granite","grain","hollow","haze","horizon","hive","harbor","harp","harmony",
+    "heat","helix","honey","hum","hunger","iris","illusion","ink","iron","ice","image","industry",
+    "island","idol","interval","idea","ivory","labyrinth","lantern","lattice","lament","lake","leaf",
+    "linen","light","lumen","logic","lily","mist","mirage","myriad","neon","nether","nocturne","noise",
+    "night","nature","needle","nest","notion","obelisk","obsidian","orchid","orbit","oasis","oak",
+    "opal","omen","oxide","object","origin","prism","pulse","pyre","pearl","petal","pattern","planet",
+    "plate","paper","path","pond","quartz","quiet","quest","quill","quasar","quilt","quartzite","quiver",
+    "rift","spire","specter","spectrum","shard","signal","solstice","shadow","shroud","sable","sand",
+    "salt","steam","stone","spring","star","smoke","silver","scarlet","structure","shore","shape",
+    "tomb","twilight","veil","vortex","vein","void","vessel","vine","vapor","valley","vector","vista",
+    "vintage","wraith","warp","web","whisper","water","wind","wood","wax","wave","wildflower","willow",
+    "wool","woven","zenith","zephyr","zone","zinnia","zircon"
+]
+
+# adjectives / modifiers
+mods = [
+    "ancient","broken","burned","crystalline","damp","drifting","echoing","faint","fractured","frozen",
+    "gilded","glowing","hollow","iridescent","jagged","looming","mottled","muted","noisy","odd",
+    "polished","prismatic","quiet","rusted","sere","soft","spattered","stained","textured","torn",
+    "weathered","wet","worn","woven","grainy","gleaming","foggy","silken","matte","glossy"
+]
+
+# textures, materials, tech, emotions, places
+extras = [
+    "marble","chrome","velvet","leather","copper","steel","plastic","paper","glass","lace",
+    "circuitry","neon","analog","digital","signal","static","magnet","wire","node","server",
+    "memory","echoes","currents","driftwood","shore","lighthouse","market","terrace","balcony",
+    "root","stem","trunk","branch","orchid","lumen","magnet","particle","quantum","gravity","solar",
+    "tidal","volcanic","ember","ink","canvas","texture","threshold","liminal","subliminal","clockwork",
+    "dustcloud","flash","spark","voltage","current","magnetism","transmission","reflection","horizon",
+    "skyline","flightpath","birdsong","footfall","heartbeat","breath","vision","memory","chromatic",
+    "monochrome","gradient","contrast","exposure","focus","blur","depth","dimension","form","mass",
+    "energy","spirit","attic","cellar","chimney","window","gardenpath","alleyway","arch","column",
+    "keystone","pillar","monument","talisman","key","compass","map","journal","shardglass","bark","soil",
+    "puddle","dustmote","wireframe"
+]
+
+# Build a larger mixed pool programmatically to reach ~1000 unique-ish items
+def build_word_pool(target=1000):
+    pool = []
+    # start with base nouns and extras first
+    pool.extend(base_nouns)
+    pool.extend(extras)
+    # combine basic modifiers with base nouns to make more varied words
+    for a, b in itertools.product(mods, base_nouns):
+        pool.append(f"{a} {b}")
+        if len(pool) >= target:
+            break
+    # if still short, combine modifiers with extras
+    if len(pool) < target:
+        for a, b in itertools.product(mods, extras):
+            pool.append(f"{a} {b}")
+            if len(pool) >= target:
+                break
+    # ensure unique and trim to target
+    uniq = []
+    for w in pool:
+        if w not in uniq:
+            uniq.append(w)
+        if len(uniq) >= target:
+            break
+    return uniq
+
+ATMOSPHERIC_WORDS = build_word_pool(1000)
+
+# ---------------------------
+# Visual descriptor pool and MJ values
+# ---------------------------
+VISUAL_DESCRIPTORS = [
+    "glitching colors","drifting light bloom","floating architecture","fractured reflections",
+    "shifting geometry","soft neon haze","overexposed contours","cosmic distortion",
+    "fog layers moving like breath","shimmering gradients","broken light scatter",
+    "deep chromatic shadows","mirrored echo forms","vibrating outlines","pulsing soft glow",
+    "ghostlike motion blur","flickering perspective","liquid reflections","surreal dimensional fold",
+    "negative-space highlights"
+]
+
+MJ_STYLIZE_VALUES = [50, 100, 250, 500, 625, 750, 1000]
+
+# ---------------------------
+# Prompt builder with full de-duplication
+# ---------------------------
+def make_prompt(person_mode=False, add_mj_params=True):
+    # sample 9 unique words from ATMOSPHERIC_WORDS
+    fragments = random.sample(ATMOSPHERIC_WORDS, k=9)
+
+    # body words (3), hints (3), person-source (3)
+    body_words = fragments[0:3]
+    hint_words = fragments[3:6]
+    person_candidates = fragments[6:9]  # guaranteed not to overlap with body/hints
+
+    # choose a clean person descriptor (phrase) from pool,
+    # but if you prefer a single-word person-flavour, use person_candidates
+    person_phrase = random.choice(PERSON_DESCRIPTORS)
+    # If we want to sometimes use a single-word adjective/noun as "person-flavour",
+    # we can mix in a candidate occasionally. For now person_phrase is coherent.
+
+    # Build prompt depending on mode
+    if person_mode:
+        prompt_body = (
+            f"A {person_phrase} standing among {body_words[0]}, {body_words[1]}, {body_words[2]}, "
+            f"with hints of {hint_words[0]}, {hint_words[1]}, {hint_words[2]}, "
+            f"{random.choice(VISUAL_DESCRIPTORS)}"
+        )
+    else:
+        # use two words as compound for subject so it reads okay
+        prompt_body = (
+            f"A {body_words[0]} {body_words[1]} emerging from {body_words[2]}, "
+            f"surrounded by {hint_words[0]}, {hint_words[1]}, {hint_words[2]}, "
+            f"{random.choice(VISUAL_DESCRIPTORS)}"
+        )
+
+    # optionally add MidJourney params
+    if add_mj_params:
+        s_val = random.choice(MJ_STYLIZE_VALUES)
+        sref_val = random.randint(10**9, 10**10 - 1)  # 10-digit
+        prompt_body += f" --s {s_val} --sref {sref_val}"
+
+    return prompt_body
+
+# ---------------------------
+# Streamlit UI
+# ---------------------------
+if "prompt" not in st.session_state:
+    st.session_state.prompt = ""
+
+col1, col2 = st.columns([1, 2])
+
+with col1:
+    st.header("Controls")
+    person_mode = st.checkbox("Center the prompt around a person", value=False)
+    add_mj = st.checkbox("Add random MidJourney --s and --sref", value=True)
+    if st.button("Generate Prompt"):
+        st.session_state.prompt = make_prompt(person_mode, add_mj_params=add_mj)
+    st.markdown("---")
+    st.markdown("Tip: use the prompt directly in MidJourney or Flux. Manually copy from the box on the right.", unsafe_allow_html=True)
+    st.markdown(
+    "Created by [@Farah_ai_](https://x.com/Farah_ai_)", unsafe_allow_html=True)
+
+with col2:
+    st.header("Output")
+    if st.session_state.prompt:
+        st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=180)
+
+st.markdown("---")
+st.markdown(
+    "Use of this generator is free but if you find it useful please consider donating a little; [Donate via Kofi](https://ko-fi.com/farahai)",
+    unsafe_allow_html=True
+)
+st.markdown("*~ Let the chaos bloom ~*", unsafe_allow_html=True)
+
+st.markdown(
+    """
+    <style>
+    .block-container {
+        backdrop-filter: blur(6px);
+        background: rgba(0, 0, 0, 0.55);
+        border-radius: 12px;
+        padding: 30px;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
-
-# --- Headings ---
-st.markdown("### 🔮 Chaos Prompt Generator 🔮")
-st.markdown("*A surreal, eldritch prompt engine for MidJourney and beyond*")
-st.markdown("---")
-
-# --- Word Pools ---
-all_words = ["abyss","aether","aura","arcane","astral","altar","amber","anomaly","apparition","arboreal",
-"aurora","ashen","artifact","basilisk","blight","bramble","bloom","banshee","barrow","beacon",
-"catacomb","cinder","cavern","cipher","crystal","cobweb","corvus","chaos","chasm","cavernous",
-"crypt","crux","catalyst","crevice","crescent","cobble","cavern","drift","dusk","dust","dome",
-"drone","echo","ember","eclipse","ether","ethereal","effigy","fracture","fractal","fog","flare",
-"frost","gossamer","gloom","glyph","glimmer","hollow","haze","haunt","hive","horizon","hollowed",
-"incubus","iris","infernal","illusion","labyrinth","lantern","lattice","lament","loom","lumen",
-"maelstrom","mist","mirage","myriad","neon","nether","nocturne","obelisk","obsidian","orb","orbit",
-"oasis","omens","ombre","phantom","prism","pulse","pyre","quartz","rift","spire","specter","spectrum",
-"shard","signal","solstice","shadow","spire","shroud","sable","tomb","twilight","veil","vortex",
-"vein","void","wraith","warp","web","whisper","zenith","zephyr","zoetic"]
-
-human_adj = ["mysterious", "ethereal", "surreal", "dreamlike", "eerie","otherworldly",
-"luminous", "ageless", "enigmatic", "soft-lit","phantasmic","haunted","celestial","gossamer",
-"arcane","shadowed","lucid","ominous","astral","haunting"]
-
-random_descriptors = ["cinematic lighting", "strange dreamlike atmosphere", "glitching colors",
-"floating objects", "soft shadows", "fractal patterns", "foggy ambiance", "overexposed highlights",
-"vibrant reflections", "twisted perspective","distorted reality", "surreal reflections",
-"mirrored dimensions", "ethereal glow","phantasmic hues","floating geometry","shifting shadows",
-"liquid light","fractured space","cosmic distortion"]
-
-mj_stylize_values = [50, 100, 250, 500, 625, 750, 1000]
-
-def make_prompt(person_mode=False, add_mj_params=True):
-    fragments = random.sample(all_words, k=9)
-    body_words = fragments[:3]
-    hints_words = fragments[3:6]
-
-    if person_mode:
-        available_for_person = fragments[6:]
-        person_flavour = random.choice(available_for_person) if available_for_person else random.choice(human_adj)
-        prompt_body = (
-            f"A {person_flavour} person standing among {', '.join(body_words)}, "
-            f"with hints of {', '.join(hints_words)}, "
-            f"{random.choice(random_descriptors)}."
-        )
-    else:
-        prompt_body = (
-            f"A {body_words[0]} {body_words[1]} emerging from {body_words[2]}, "
-            f"surrounded by {', '.join(hints_words)}, "
-            f"{random.choice(random_descriptors)}."
-        )
-
-    if add_mj_params:
-        s_val = random.choice(mj_stylize_values)
-        sref_val = random.randint(1000000000, 9999999999)
-        prompt_body += f" --s {s_val} --sref {sref_val}"
-
-    return prompt_body
-
-# --- Session state ---
-if "prompt" not in st.session_state:
-    st.session_state.prompt = ""
-
-# --- Layout columns ---
-col1, col2 = st.columns([1,2])
-
-with col1:
-    person_mode = st.checkbox("Center the prompt around a person", value=False)
-    add_mj = st.checkbox("Add random MidJourney --s and --sref parameters", value=True)
-    if st.button("Generate Prompt"):
-        st.session_state.prompt = make_prompt(person_mode, add_mj_params=add_mj)
-
-with col2:
-    if st.session_state.prompt:
-        st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=150)
-
-# --- Footer ---
-st.markdown("---")
-st.markdown(
-    "Created by [@Farah_ai_](https://x.com/Farah_ai_)", unsafe_allow_html=True
-)
-st.markdown(
-    "If you find this app useful please consider donating and help support me improve the app further [Donate via Kofi](https://ko-fi.com/farahai)", unsafe_allow_html=True
-)
-st.markdown(
-    "*~ Let the chaos guide your creations ~*", unsafe_allow_html=True
-)
-
