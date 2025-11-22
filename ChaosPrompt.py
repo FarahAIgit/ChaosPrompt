@@ -24,7 +24,7 @@ st.markdown(
 st.markdown(
     """
     <div style="text-align:center;">
-        <img src="https://github.com/FarahAIgit/midjourney-prompt-tool-assets/raw/refs/heads/main/chaospromptlogo" style="width:90%; max-width:900px; margin-bottom:20px;">
+        <img src="https://github.com/FarahAIgit/ChaosPrompt/blob/e6cfefad007a1e2c6bff3a717638961bfb49d771/ChaosPrompt_Logo.png" style="width:90%; max-width:900px; margin-bottom:20px;">
     </div>
     """,
     unsafe_allow_html=True
@@ -240,6 +240,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 
 
