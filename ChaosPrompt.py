@@ -23,7 +23,7 @@ st.markdown(
 )
 
 st.markdown("### 🔮 Chaos Prompt Generator 🔮")
-st.markdown("*A surreal prompt engine — fully de-duplicated words, optional MidJourney params*")
+st.markdown("*A surreal prompt engine*")
 st.markdown("---")
 
 # ---------------------------
@@ -232,3 +232,4 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
