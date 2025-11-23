@@ -7,7 +7,7 @@ st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
 # ---------------------------
 # Minimal dark styling
 # ---------------------------
-st.markdown(
+    st.markdown(
     """
     <style>
     body { background-color: #0d0d0f; color: #e8e6e3; font-family: 'Courier New', monospace; }
@@ -19,6 +19,12 @@ st.markdown(
     .footer { color:#a8a6a3; font-size:12px; margin-top:8px; }
     /* Style the code block to match the theme */
     .stCodeBlock { background: rgba(10,10,12,0.7); }
+    /* Make code block text wrap instead of scroll */
+    .stCodeBlock code { 
+        white-space: pre-wrap !important; 
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
