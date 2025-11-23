@@ -25,6 +25,19 @@ st.markdown(
         word-wrap: break-word !important;
         overflow-wrap: break-word !important;
     }
+    .stCodeBlock pre {
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        overflow-x: auto !important;
+    }
+    [data-testid="stCode"] {
+        white-space: pre-wrap !important;
+    }
+    [data-testid="stCode"] code {
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
