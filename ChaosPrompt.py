@@ -1,7 +1,7 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import random
 import itertools
+import pyperclip
 
 st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
 
@@ -172,20 +172,6 @@ def make_prompt(person_mode=False, add_mj_params=True):
 
     return prompt_body
 
-# JavaScript function to copy text to clipboard
-def copy_to_clipboard(text):
-    # Escape backticks and backslashes in the text
-    escaped_text = text.replace('\\', '\\\\').replace('`', '\\`')
-    components.html(
-        f"""
-        <script>
-        const textToCopy = `{escaped_text}`;
-        navigator.clipboard.writeText(textToCopy);
-        </script>
-        """,
-        height=0,
-    )
-
 # ---------------------------
 # Streamlit UI
 # ---------------------------
@@ -210,8 +196,11 @@ with col2:
     if st.session_state.prompt:
         st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=180, key="prompt_display")
         if st.button("📋 Copy Prompt", key="copy_btn"):
-            copy_to_clipboard(st.session_state.prompt)
-            st.success("✓ Copied to clipboard!")
+            try:
+                pyperclip.copy(st.session_state.prompt)
+                st.success("✓ Copied to clipboard!")
+            except:
+                st.warning("Unable to copy automatically. Please copy manually from the text box above.")
 
 st.markdown("---")
 st.markdown(
