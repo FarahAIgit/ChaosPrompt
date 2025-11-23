@@ -167,10 +167,35 @@ VISUAL_DESCRIPTORS = [
 MJ_STYLIZE_VALUES = [50, 100, 250, 500, 625, 750, 1000]
 
 def make_prompt(person_mode=False, add_mj_params=True):
-    fragments = random.sample(ATMOSPHERIC_WORDS, k=9)
-    body_words = fragments[0:3]
-    hint_words = fragments[3:6]
-    person_candidates = fragments[6:9]
+    # Sample more words than we need to allow for deduplication
+    fragments = random.sample(ATMOSPHERIC_WORDS, k=15)
+    
+    # Split words by spaces and flatten to check for individual word duplicates
+    all_individual_words = []
+    unique_fragments = []
+    
+    for fragment in fragments:
+        words_in_fragment = fragment.lower().split()
+        # Check if any word in this fragment has already been used
+        has_duplicate = any(word in all_individual_words for word in words_in_fragment)
+        
+        if not has_duplicate:
+            unique_fragments.append(fragment)
+            all_individual_words.extend(words_in_fragment)
+        
+        # Stop once we have enough unique fragments
+        if len(unique_fragments) >= 9:
+            break
+    
+    # If we don't have enough unique fragments, just use what we have
+    while len(unique_fragments) < 9:
+        new_fragment = random.choice(ATMOSPHERIC_WORDS)
+        if new_fragment not in unique_fragments:
+            unique_fragments.append(new_fragment)
+    
+    body_words = unique_fragments[0:3]
+    hint_words = unique_fragments[3:6]
+    person_candidates = unique_fragments[6:9]
     person_phrase = random.choice(PERSON_DESCRIPTORS)
 
     if person_mode:
