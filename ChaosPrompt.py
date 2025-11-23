@@ -17,19 +17,8 @@ st.markdown(
     .block-container { padding: 1rem 2rem; }
     h1,h2,h3 { color: #ff8c00; font-family: 'Courier New', monospace; }
     .footer { color:#a8a6a3; font-size:12px; margin-top:8px; }
-    .copy-button {
-        background-color: #252427;
-        color: #f2f0ef;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 14px;
-        cursor: pointer;
-        font-family: 'Courier New', monospace;
-        font-size: 14px;
-    }
-    .copy-button:hover {
-        background-color: #353337;
-    }
+    /* Style the code block to match the theme */
+    .stCodeBlock { background: rgba(10,10,12,0.7); }
     </style>
     """,
     unsafe_allow_html=True,
@@ -189,8 +178,6 @@ def make_prompt(person_mode=False, add_mj_params=True):
 # ---------------------------
 if "prompt" not in st.session_state:
     st.session_state.prompt = ""
-if "copied" not in st.session_state:
-    st.session_state.copied = False
 
 col1, col2 = st.columns([1, 2])
 
@@ -200,40 +187,17 @@ with col1:
     add_mj = st.checkbox("Add random MidJourney --s and --sref", value=True)
     if st.button("Generate Prompt"):
         st.session_state.prompt = make_prompt(person_mode, add_mj_params=add_mj)
-        st.session_state.copied = False
     st.markdown("---")
-    st.markdown("Tip: Click the copy button to copy your prompt.", unsafe_allow_html=True)
+    st.markdown("Tip: Click the copy icon (top right of the prompt box) to copy your prompt.", unsafe_allow_html=True)
     st.markdown(
     "Created by [@Farah_ai_](https://x.com/Farah_ai_)", unsafe_allow_html=True)
 
 with col2:
     st.header("Output")
     if st.session_state.prompt:
-        st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=180, key="prompt_display")
-        
-        # Create a unique ID for the copy button
-        button_id = "copy_button_" + str(hash(st.session_state.prompt))
-        
-        # HTML button with JavaScript to copy text
-        copy_button_html = f"""
-        <button class="copy-button" onclick="copyToClipboard()">📋 Copy Prompt</button>
-        <p id="copy-status" style="color: #4CAF50; margin-top: 10px; display: none;">✓ Copied to clipboard!</p>
-        
-        <script>
-        function copyToClipboard() {{
-            const text = {repr(st.session_state.prompt)};
-            navigator.clipboard.writeText(text).then(function() {{
-                document.getElementById('copy-status').style.display = 'block';
-                setTimeout(function() {{
-                    document.getElementById('copy-status').style.display = 'none';
-                }}, 3000);
-            }}).catch(function(err) {{
-                alert('Failed to copy. Please copy manually from the text box.');
-            }});
-        }}
-        </script>
-        """
-        st.markdown(copy_button_html, unsafe_allow_html=True)
+        st.markdown("**Your Generated Prompt** _(click the copy icon in the top-right corner):_")
+        # Use st.code which has a built-in copy button
+        st.code(st.session_state.prompt, language=None)
 
 st.markdown("---")
 st.markdown(
