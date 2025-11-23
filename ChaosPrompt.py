@@ -205,7 +205,7 @@ if "prompt" not in st.session_state:
 col1, col2 = st.columns([1, 2])
 
 with col1:
-    st.header("Controls")
+    st.header("Options")
     person_mode = st.checkbox("Center the prompt around a person", value=False)
     add_mj = st.checkbox("Add random MidJourney --s and --sref", value=True)
     if st.button("Generate Prompt"):
@@ -240,6 +240,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 
 
