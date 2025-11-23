@@ -211,7 +211,7 @@ with col1:
     if st.button("Generate Prompt"):
         st.session_state.prompt = make_prompt(person_mode, add_mj_params=add_mj)
     st.markdown("---")
-    st.markdown("Tip: use the prompt directly in MidJourney or Flux. Manually copy from the box on the right.", unsafe_allow_html=True)
+    st.markdown("Tip: Manually copy from the box on the right and paste into your preferred AI image generator.", unsafe_allow_html=True)
     st.markdown(
     "Created by [@Farah_ai_](https://x.com/Farah_ai_)", unsafe_allow_html=True)
 
@@ -240,6 +240,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 
 
