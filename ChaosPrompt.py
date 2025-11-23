@@ -17,6 +17,19 @@ st.markdown(
     .block-container { padding: 1rem 2rem; }
     h1,h2,h3 { color: #ff8c00; font-family: 'Courier New', monospace; }
     .footer { color:#a8a6a3; font-size:12px; margin-top:8px; }
+    .copy-button {
+        background-color: #252427;
+        color: #f2f0ef;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 14px;
+        cursor: pointer;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+    }
+    .copy-button:hover {
+        background-color: #353337;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -65,7 +78,6 @@ PERSON_DESCRIPTORS = [
 
 # ---------------------------
 # Programmatic generation of 1000 mixed words
-# (so we don't paste 1000 strings verbatim)
 # ---------------------------
 base_nouns = [
     "abyss","aether","aura","altar","anomaly","apparition","astral","amber","arcane","atlas","ashen",
@@ -90,7 +102,6 @@ base_nouns = [
     "wool","woven","zenith","zephyr","zone","zinnia","zircon"
 ]
 
-# adjectives / modifiers
 mods = [
     "ancient","broken","burned","crystalline","damp","drifting","echoing","faint","fractured","frozen",
     "gilded","glowing","hollow","iridescent","jagged","looming","mottled","muted","noisy","odd",
@@ -98,7 +109,6 @@ mods = [
     "weathered","wet","worn","woven","grainy","gleaming","foggy","silken","matte","glossy"
 ]
 
-# textures, materials, tech, emotions, places
 extras = [
     "marble","chrome","velvet","leather","copper","steel","plastic","paper","glass","lace",
     "circuitry","neon","analog","digital","signal","static","magnet","wire","node","server",
@@ -113,24 +123,19 @@ extras = [
     "puddle","dustmote","wireframe"
 ]
 
-# Build a larger mixed pool programmatically to reach ~1000 unique-ish items
 def build_word_pool(target=1000):
     pool = []
-    # start with base nouns and extras first
     pool.extend(base_nouns)
     pool.extend(extras)
-    # combine basic modifiers with base nouns to make more varied words
     for a, b in itertools.product(mods, base_nouns):
         pool.append(f"{a} {b}")
         if len(pool) >= target:
             break
-    # if still short, combine modifiers with extras
     if len(pool) < target:
         for a, b in itertools.product(mods, extras):
             pool.append(f"{a} {b}")
             if len(pool) >= target:
                 break
-    # ensure unique and trim to target
     uniq = []
     for w in pool:
         if w not in uniq:
@@ -141,9 +146,6 @@ def build_word_pool(target=1000):
 
 ATMOSPHERIC_WORDS = build_word_pool(1000)
 
-# ---------------------------
-# Visual descriptor pool and MJ values
-# ---------------------------
 VISUAL_DESCRIPTORS = [
     "glitching colors","drifting light bloom","floating architecture","fractured reflections",
     "shifting geometry","soft neon haze","overexposed contours","cosmic distortion",
@@ -155,25 +157,13 @@ VISUAL_DESCRIPTORS = [
 
 MJ_STYLIZE_VALUES = [50, 100, 250, 500, 625, 750, 1000]
 
-# ---------------------------
-# Prompt builder with full de-duplication
-# ---------------------------
 def make_prompt(person_mode=False, add_mj_params=True):
-    # sample 9 unique words from ATMOSPHERIC_WORDS
     fragments = random.sample(ATMOSPHERIC_WORDS, k=9)
-
-    # body words (3), hints (3), person-source (3)
     body_words = fragments[0:3]
     hint_words = fragments[3:6]
-    person_candidates = fragments[6:9]  # guaranteed not to overlap with body/hints
-
-    # choose a clean person descriptor (phrase) from pool,
-    # but if you prefer a single-word person-flavour, use person_candidates
+    person_candidates = fragments[6:9]
     person_phrase = random.choice(PERSON_DESCRIPTORS)
-    # If we want to sometimes use a single-word adjective/noun as "person-flavour",
-    # we can mix in a candidate occasionally. For now person_phrase is coherent.
 
-    # Build prompt depending on mode
     if person_mode:
         prompt_body = (
             f"A {person_phrase} standing among {body_words[0]}, {body_words[1]}, {body_words[2]}, "
@@ -181,17 +171,15 @@ def make_prompt(person_mode=False, add_mj_params=True):
             f"{random.choice(VISUAL_DESCRIPTORS)}"
         )
     else:
-        # use two words as compound for subject so it reads okay
         prompt_body = (
             f"A {body_words[0]} {body_words[1]} emerging from {body_words[2]}, "
             f"surrounded by {hint_words[0]}, {hint_words[1]}, {hint_words[2]}, "
             f"{random.choice(VISUAL_DESCRIPTORS)}"
         )
 
-    # optionally add MidJourney params
     if add_mj_params:
         s_val = random.choice(MJ_STYLIZE_VALUES)
-        sref_val = random.randint(10**9, 10**10 - 1)  # 10-digit
+        sref_val = random.randint(10**9, 10**10 - 1)
         prompt_body += f" --s {s_val} --sref {sref_val}"
 
     return prompt_body
@@ -201,6 +189,8 @@ def make_prompt(person_mode=False, add_mj_params=True):
 # ---------------------------
 if "prompt" not in st.session_state:
     st.session_state.prompt = ""
+if "copied" not in st.session_state:
+    st.session_state.copied = False
 
 col1, col2 = st.columns([1, 2])
 
@@ -210,15 +200,40 @@ with col1:
     add_mj = st.checkbox("Add random MidJourney --s and --sref", value=True)
     if st.button("Generate Prompt"):
         st.session_state.prompt = make_prompt(person_mode, add_mj_params=add_mj)
+        st.session_state.copied = False
     st.markdown("---")
-    st.markdown("Tip: Manually copy from the box on the right and paste into your preferred AI image generator.", unsafe_allow_html=True)
+    st.markdown("Tip: Click the copy button to copy your prompt.", unsafe_allow_html=True)
     st.markdown(
     "Created by [@Farah_ai_](https://x.com/Farah_ai_)", unsafe_allow_html=True)
 
 with col2:
     st.header("Output")
     if st.session_state.prompt:
-        st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=180)
+        st.text_area("Your Generated Prompt:", value=st.session_state.prompt, height=180, key="prompt_display")
+        
+        # Create a unique ID for the copy button
+        button_id = "copy_button_" + str(hash(st.session_state.prompt))
+        
+        # HTML button with JavaScript to copy text
+        copy_button_html = f"""
+        <button class="copy-button" onclick="copyToClipboard()">📋 Copy Prompt</button>
+        <p id="copy-status" style="color: #4CAF50; margin-top: 10px; display: none;">✓ Copied to clipboard!</p>
+        
+        <script>
+        function copyToClipboard() {{
+            const text = {repr(st.session_state.prompt)};
+            navigator.clipboard.writeText(text).then(function() {{
+                document.getElementById('copy-status').style.display = 'block';
+                setTimeout(function() {{
+                    document.getElementById('copy-status').style.display = 'none';
+                }}, 3000);
+            }}).catch(function(err) {{
+                alert('Failed to copy. Please copy manually from the text box.');
+            }});
+        }}
+        </script>
+        """
+        st.markdown(copy_button_html, unsafe_allow_html=True)
 
 st.markdown("---")
 st.markdown(
