@@ -7,7 +7,7 @@ st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
 # ---------------------------
 # Minimal dark styling
 # ---------------------------
-    st.markdown(
+st.markdown(
     """
     <style>
     body { background-color: #0d0d0f; color: #e8e6e3; font-family: 'Courier New', monospace; }
@@ -29,6 +29,7 @@ st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
     """,
     unsafe_allow_html=True,
 )
+
 st.markdown(
     """
     <div style="text-align:center;">
