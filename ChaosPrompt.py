@@ -213,7 +213,7 @@ def make_prompt(person_mode=False, add_mj_params=True):
 
     if add_mj_params:
         s_val = random.choice(MJ_STYLIZE_VALUES)
-        sref_val = random.randint(10**9, 10**10 - 1)
+        sref_val = random.randint(0, 4294967295)  # 32-bit unsigned integer range for Midjourney compatibility
         prompt_body += f" --s {s_val} --sref {sref_val}"
 
     return prompt_body
