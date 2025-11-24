@@ -79,10 +79,10 @@ PERSON_DESCRIPTORS = [
     "marked by glowing threads",
 
     # Roles / Archetypes
-    "the seeker", "the observer", "the initiate", "the wayfarer",
-    "the revenant", "the pilgrim", "the apostate", "the wanderer",
-    "the keeper", "the dream-carrier", "the archivist",
-    "the outlier", "the gatewatcher"
+    "seeker", "observer", "initiate", "wayfarer",
+    "revenant", "pilgrim", "apostate", "wanderer",
+    "keeper", "dream-carrier", "archivist",
+    "outlier", "gatewatcher"
 ]
 
 # ---------------------------
@@ -264,3 +264,4 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
