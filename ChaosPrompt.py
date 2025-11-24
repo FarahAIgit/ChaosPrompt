@@ -12,7 +12,7 @@ st.markdown(
     <style>
     /* Override Streamlit's default primary color */
     :root {
-        --primary-color: #c946ff;
+        --primary-color: #a931e1;
     }
     
     body { background-color: #0d0d0f; color: #e8e6e3; font-family: 'Courier New', monospace; }
@@ -446,3 +446,4 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
