@@ -52,9 +52,25 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown("### 🔮 Chaos Prompt Generator 🔮")
+st.markdown("### 🔮 Chaos Prompt Generator 🔮", unsafe_allow_html=True)
 st.markdown("*A surreal prompt engine*")
 st.markdown("---")
+
+# Add CSS to center the title and tagline
+st.markdown(
+    """
+    <style>
+    /* Center the first h3 (title) and the first paragraph (tagline) */
+    .block-container > div > div > div:first-child h3 {
+        text-align: center;
+    }
+    .block-container > div > div > div:first-child p {
+        text-align: center;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # ---------------------------
 # Clean person descriptor pool
@@ -71,10 +87,10 @@ PERSON_BASE_DESCRIPTORS = [
     "haunted dreamer",
 
     # Roles / Archetypes
-    "seeker", "observer", "initiate", "wayfarer",
-    "revenant", "pilgrim", "apostate", "wanderer",
-    "keeper", "dream-carrier", "archivist",
-    "outlier", "gatewatcher"
+    "the seeker", "the observer", "the initiate", "the wayfarer",
+    "the revenant", "the pilgrim", "the apostate", "the wanderer",
+    "the keeper", "the dream-carrier", "the archivist",
+    "the outlier", "the gatewatcher"
 ]
 
 PERSON_STYLE_MODIFIERS = [
@@ -274,4 +290,3 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
