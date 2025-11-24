@@ -38,59 +38,65 @@ st.markdown(
         white-space: pre-wrap !important;
         word-wrap: break-word !important;
     }
-    /* Checkbox styling */
-    .stCheckbox > label > div[data-testid="stMarkdownContainer"] > p {
-        color: #e8e6e3 !important;
+    /* Checkbox styling - Remove ALL backgrounds from text areas */
+    .stCheckbox {
         background-color: transparent !important;
     }
-    /* Remove background from checkbox labels */
+    .stCheckbox * {
+        background-color: transparent !important;
+    }
     .stCheckbox label {
         background-color: transparent !important;
     }
-    .stCheckbox {
+    .stCheckbox label::before,
+    .stCheckbox label::after {
+        background-color: transparent !important;
+    }
+    .stCheckbox > label > div[data-testid="stMarkdownContainer"] {
+        background-color: transparent !important;
+    }
+    .stCheckbox > label > div[data-testid="stMarkdownContainer"] > p {
+        color: #e8e6e3 !important;
         background-color: transparent !important;
     }
     .stCheckbox label span {
         background-color: transparent !important;
     }
-    .stCheckbox label div[data-testid="stMarkdownContainer"] {
-        background-color: transparent !important;
-    }
-    /* Checkbox box color when checked - multiple selectors for compatibility */
-    .stCheckbox > label > div[role="checkbox"][aria-checked="true"] {
-        background-color: #c946ff !important;
-    }
-    .stCheckbox input[type="checkbox"]:checked + div {
-        background-color: #c946ff !important;
-    }
-    /* Checkbox border color */
-    .stCheckbox > label > div[role="checkbox"] {
-        border-color: #c946ff !important;
-    }
-    /* Additional checkbox targeting */
-    [data-testid="stCheckbox"] label span {
-        border-color: #c946ff !important;
-        background-color: transparent !important;
-    }
-    [data-testid="stCheckbox"] input:checked ~ span {
-        background-color: #c946ff !important;
-        border-color: #c946ff !important;
-    }
-    [data-testid="stCheckbox"] label div {
+    .stCheckbox label div {
         background-color: transparent !important;
     }
     [data-testid="stCheckbox"] p {
         background-color: transparent !important;
+        color: #e8e6e3 !important;
     }
-    /* Target only the checkbox square itself */
-    [data-baseweb="checkbox"] {
-        border-color: #c946ff !important;
-    }
-    [data-baseweb="checkbox"] > div {
+    [data-testid="stCheckbox"] label span {
         background-color: transparent !important;
     }
-    [data-baseweb="checkbox"] input:checked ~ div {
+    [data-testid="stCheckbox"] label div {
+        background-color: transparent !important;
+    }
+    
+    /* Now style ONLY the checkbox square itself with purple */
+    [data-baseweb="checkbox"] {
+        background-color: transparent !important;
+    }
+    [data-baseweb="checkbox"] > div:first-child {
+        border-color: #c946ff !important;
+        background-color: transparent !important;
+    }
+    [data-baseweb="checkbox"] input:checked ~ div:first-child {
         background-color: #c946ff !important;
+        border-color: #c946ff !important;
+    }
+    
+    /* Additional targeting for the checkbox box */
+    .stCheckbox > label > div[role="checkbox"] {
+        border-color: #c946ff !important;
+        background-color: transparent !important;
+    }
+    .stCheckbox > label > div[role="checkbox"][aria-checked="true"] {
+        background-color: #c946ff !important;
+        border-color: #c946ff !important;
     }
     </style>
     """,
