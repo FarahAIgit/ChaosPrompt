@@ -38,6 +38,18 @@ st.markdown(
         white-space: pre-wrap !important;
         word-wrap: break-word !important;
     }
+    /* Checkbox styling */
+    .stCheckbox > label > div[data-testid="stMarkdownContainer"] > p {
+        color: #e8e6e3;
+    }
+    /* Checkbox box color when checked */
+    .stCheckbox > label > div[role="checkbox"][aria-checked="true"] {
+        background-color: #c946ff !important;
+    }
+    /* Checkbox border color */
+    .stCheckbox > label > div[role="checkbox"] {
+        border-color: #c946ff !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
