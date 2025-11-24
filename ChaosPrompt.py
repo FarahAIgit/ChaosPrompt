@@ -42,13 +42,31 @@ st.markdown(
     .stCheckbox > label > div[data-testid="stMarkdownContainer"] > p {
         color: #e8e6e3;
     }
-    /* Checkbox box color when checked */
+    /* Checkbox box color when checked - multiple selectors for compatibility */
     .stCheckbox > label > div[role="checkbox"][aria-checked="true"] {
+        background-color: #c946ff !important;
+    }
+    .stCheckbox input[type="checkbox"]:checked + div {
         background-color: #c946ff !important;
     }
     /* Checkbox border color */
     .stCheckbox > label > div[role="checkbox"] {
         border-color: #c946ff !important;
+    }
+    /* Additional checkbox targeting */
+    [data-testid="stCheckbox"] label span {
+        border-color: #c946ff !important;
+    }
+    [data-testid="stCheckbox"] input:checked ~ span {
+        background-color: #c946ff !important;
+        border-color: #c946ff !important;
+    }
+    /* Streamlit's internal checkbox class */
+    .st-emotion-cache-1q2d4ya {
+        background-color: #c946ff !important;
+    }
+    .st-emotion-cache-1q2d4ya:checked {
+        background-color: #c946ff !important;
     }
     </style>
     """,
