@@ -10,6 +10,11 @@ st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
 st.markdown(
     """
     <style>
+    /* Override Streamlit's default primary color */
+    :root {
+        --primary-color: #c946ff;
+    }
+    
     body { background-color: #0d0d0f; color: #e8e6e3; font-family: 'Courier New', monospace; }
     .stApp { min-height: 100vh; }
     .stTextArea textarea { background: rgba(10,10,12,0.7); color: #e8e6e3; border: 1px solid #2f2f31; }
@@ -109,6 +114,11 @@ st.markdown(
     /* Remove any orange/default accent colors */
     [data-baseweb="checkbox"] svg {
         color: #c946ff !important;
+    }
+    /* Override focus states */
+    .stCheckbox input:focus ~ div {
+        border-color: #c946ff !important;
+        box-shadow: 0 0 0 0.2rem rgba(201, 70, 255, 0.25) !important;
     }
     </style>
     """,
