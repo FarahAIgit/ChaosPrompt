@@ -59,7 +59,7 @@ st.markdown("---")
 # ---------------------------
 # Clean person descriptor pool
 # ---------------------------
-PERSON_DESCRIPTORS = [
+PERSON_BASE_DESCRIPTORS = [
     # Physical / Appearance
     "ethereal figure", "lone wanderer", "cloaked silhouette", "veiled stranger",
     "spectral woman", "shadow-touched figure", "war-torn survivor",
@@ -70,19 +70,21 @@ PERSON_DESCRIPTORS = [
     "raven-haired traveler", "luminous-faced wanderer", "forgotten outcast",
     "haunted dreamer",
 
-    # Fashion / Style
+    # Roles / Archetypes
+    "the seeker", "the observer", "the initiate", "the wayfarer",
+    "the revenant", "the pilgrim", "the apostate", "the wanderer",
+    "the keeper", "the dream-carrier", "the archivist",
+    "the outlier", "the gatewatcher"
+]
+
+PERSON_STYLE_MODIFIERS = [
+    # Fashion / Style (optional modifiers)
     "draped in tattered fabrics", "wrapped in celestial cloth",
     "wearing layered darkwear", "armored in fractured metal",
     "clad in flowing noir robes", "marked by arcane sigils",
     "wearing worn leather", "dressed in dust-coated linens",
     "adorned with subtle jewelry", "wrapped in weathered cloaks",
-    "marked by glowing threads",
-
-    # Roles / Archetypes
-    "seeker", "observer", "initiate", "wayfarer",
-    "revenant", "pilgrim", "apostate", "wanderer",
-    "keeper", "dream-carrier", "archivist",
-    "outlier", "gatewatcher"
+    "marked by glowing threads"
 ]
 
 # ---------------------------
@@ -196,7 +198,15 @@ def make_prompt(person_mode=False, add_mj_params=True):
     body_words = unique_fragments[0:3]
     hint_words = unique_fragments[3:6]
     person_candidates = unique_fragments[6:9]
-    person_phrase = random.choice(PERSON_DESCRIPTORS)
+    
+    # Build person phrase: base descriptor + optional style modifier
+    person_base = random.choice(PERSON_BASE_DESCRIPTORS)
+    # 50% chance to add a style modifier
+    if random.random() < 0.5:
+        person_style = random.choice(PERSON_STYLE_MODIFIERS)
+        person_phrase = f"{person_base} {person_style}"
+    else:
+        person_phrase = person_base
 
     if person_mode:
         prompt_body = (
@@ -264,4 +274,3 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
