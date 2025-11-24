@@ -41,6 +41,14 @@ st.markdown(
     /* Checkbox styling */
     .stCheckbox > label > div[data-testid="stMarkdownContainer"] > p {
         color: #e8e6e3;
+        background-color: transparent !important;
+    }
+    /* Remove background from checkbox labels */
+    .stCheckbox label {
+        background-color: transparent !important;
+    }
+    .stCheckbox {
+        background-color: transparent !important;
     }
     /* Checkbox box color when checked - multiple selectors for compatibility */
     .stCheckbox > label > div[role="checkbox"][aria-checked="true"] {
@@ -56,16 +64,23 @@ st.markdown(
     /* Additional checkbox targeting */
     [data-testid="stCheckbox"] label span {
         border-color: #c946ff !important;
+        background-color: transparent !important;
     }
     [data-testid="stCheckbox"] input:checked ~ span {
         background-color: #c946ff !important;
         border-color: #c946ff !important;
     }
-    /* Streamlit's internal checkbox class */
-    .st-emotion-cache-1q2d4ya {
-        background-color: #c946ff !important;
+    [data-testid="stCheckbox"] label div {
+        background-color: transparent !important;
     }
-    .st-emotion-cache-1q2d4ya:checked {
+    /* Target only the checkbox square itself */
+    [data-baseweb="checkbox"] {
+        border-color: #c946ff !important;
+    }
+    [data-baseweb="checkbox"] > div {
+        background-color: transparent !important;
+    }
+    [data-baseweb="checkbox"] input:checked ~ div {
         background-color: #c946ff !important;
     }
     </style>
