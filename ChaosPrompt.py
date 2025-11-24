@@ -173,6 +173,69 @@ def build_word_pool(target=1000):
 
 ATMOSPHERIC_WORDS = build_word_pool(1000)
 
+# ========================================
+# PURE CHAOS MODE - PROCEDURAL WORD GENERATION
+# (This section can be easily removed if not desired)
+# ========================================
+
+def generate_chaos_word():
+    """Generate a mystical-sounding made-up word using syllable patterns"""
+    # Consonant clusters and single consonants for atmospheric feel
+    consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'w', 'z']
+    consonant_clusters = ['br', 'cr', 'dr', 'fr', 'gr', 'pr', 'tr', 'bl', 'cl', 'fl', 'gl', 'pl', 'sl', 
+                          'sc', 'sk', 'sm', 'sn', 'sp', 'st', 'sw', 'th', 'ch', 'sh', 'wh', 'wr']
+    
+    # Vowels and vowel combinations
+    vowels = ['a', 'e', 'i', 'o', 'u', 'ae', 'ea', 'ia', 'io', 'ou', 'eo']
+    
+    # Syllable endings
+    endings = ['', 'n', 's', 'x', 'r', 'l', 'th', 'sh', 'nt', 'st', 'rm', 'rn', 'nd']
+    
+    # Generate 1-3 syllables
+    num_syllables = random.choice([1, 2, 2, 3])  # Weighted toward 2 syllables
+    word = ""
+    
+    for i in range(num_syllables):
+        # Start with consonant or consonant cluster
+        if random.random() < 0.4:  # 40% chance of cluster
+            word += random.choice(consonant_clusters)
+        else:
+            word += random.choice(consonants)
+        
+        # Add vowel
+        word += random.choice(vowels)
+        
+        # Maybe add ending (more likely on last syllable)
+        if i == num_syllables - 1:
+            if random.random() < 0.6:  # 60% chance on last syllable
+                word += random.choice(endings)
+        else:
+            if random.random() < 0.2:  # 20% chance on middle syllables
+                word += random.choice(endings)
+    
+    return word
+
+def mix_chaos_words(word_list, chaos_percentage=0.4):
+    """Replace a percentage of real words with procedurally generated ones"""
+    num_chaos = int(len(word_list) * chaos_percentage)
+    num_real = len(word_list) - num_chaos
+    
+    # Get real words
+    real_words = random.sample(ATMOSPHERIC_WORDS, num_real)
+    
+    # Generate chaos words
+    chaos_words = [generate_chaos_word() for _ in range(num_chaos)]
+    
+    # Combine and shuffle
+    mixed = real_words + chaos_words
+    random.shuffle(mixed)
+    
+    return mixed
+
+# ========================================
+# END PURE CHAOS MODE SECTION
+# ========================================
+
 VISUAL_DESCRIPTORS = [
     "glitching colors","drifting light bloom","floating architecture","fractured reflections",
     "shifting geometry","soft neon haze","overexposed contours","cosmic distortion",
@@ -184,21 +247,28 @@ VISUAL_DESCRIPTORS = [
 
 MJ_STYLIZE_VALUES = [50, 100, 250, 500, 625, 750, 1000]
 
-def make_prompt(person_mode=False, add_mj_params=True):
-    # Sample more words than we need to allow for deduplication
-    fragments = random.sample(ATMOSPHERIC_WORDS, k=15)
+def make_prompt(person_mode=False, add_mj_params=True, pure_chaos_mode=False):
+    # ===== PURE CHAOS MODE: Use procedurally generated words =====
+    if pure_chaos_mode:
+        word_source = mix_chaos_words(list(range(15)), chaos_percentage=0.5)
+        fragments = word_source
+    else:
+        # Sample more words than we need to allow for deduplication
+        fragments = random.sample(ATMOSPHERIC_WORDS, k=15)
+    # ===== END PURE CHAOS MODE SECTION =====
     
     # Split words by spaces and flatten to check for individual word duplicates
     all_individual_words = []
     unique_fragments = []
     
     for fragment in fragments:
-        words_in_fragment = fragment.lower().split()
+        fragment_str = str(fragment)  # Convert to string in case it's from chaos mode
+        words_in_fragment = fragment_str.lower().split()
         # Check if any word in this fragment has already been used
         has_duplicate = any(word in all_individual_words for word in words_in_fragment)
         
         if not has_duplicate:
-            unique_fragments.append(fragment)
+            unique_fragments.append(fragment_str)
             all_individual_words.extend(words_in_fragment)
         
         # Stop once we have enough unique fragments
@@ -207,7 +277,10 @@ def make_prompt(person_mode=False, add_mj_params=True):
     
     # If we don't have enough unique fragments, just use what we have
     while len(unique_fragments) < 9:
-        new_fragment = random.choice(ATMOSPHERIC_WORDS)
+        if pure_chaos_mode:
+            new_fragment = generate_chaos_word()
+        else:
+            new_fragment = random.choice(ATMOSPHERIC_WORDS)
         if new_fragment not in unique_fragments:
             unique_fragments.append(new_fragment)
     
@@ -256,8 +329,9 @@ with col1:
     st.header("Options")
     person_mode = st.checkbox("Center the prompt around a person", value=False)
     add_mj = st.checkbox("Add random MidJourney --s and --sref", value=True)
+    pure_chaos = st.checkbox("🌀 Pure Chaos Mode (generate invented words)", value=False)
     if st.button("Generate Prompt"):
-        st.session_state.prompt = make_prompt(person_mode, add_mj_params=add_mj)
+        st.session_state.prompt = make_prompt(person_mode, add_mj_params=add_mj, pure_chaos_mode=pure_chaos)
     st.markdown("---")
     st.markdown("Tip: Click the copy icon (top right of the prompt box) to copy your prompt.", unsafe_allow_html=True)
     st.markdown(
