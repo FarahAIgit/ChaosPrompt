@@ -98,6 +98,18 @@ st.markdown(
         background-color: #c946ff !important;
         border-color: #c946ff !important;
     }
+    
+    /* Target the orange outline/border on unchecked state */
+    [data-baseweb="checkbox"] > div {
+        border-color: #c946ff !important;
+    }
+    .stCheckbox input[type="checkbox"] ~ div {
+        border-color: #c946ff !important;
+    }
+    /* Remove any orange/default accent colors */
+    [data-baseweb="checkbox"] svg {
+        color: #c946ff !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
