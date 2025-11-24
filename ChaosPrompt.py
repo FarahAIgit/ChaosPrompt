@@ -40,7 +40,7 @@ st.markdown(
     }
     /* Checkbox styling */
     .stCheckbox > label > div[data-testid="stMarkdownContainer"] > p {
-        color: #e8e6e3;
+        color: #e8e6e3 !important;
         background-color: transparent !important;
     }
     /* Remove background from checkbox labels */
@@ -48,6 +48,12 @@ st.markdown(
         background-color: transparent !important;
     }
     .stCheckbox {
+        background-color: transparent !important;
+    }
+    .stCheckbox label span {
+        background-color: transparent !important;
+    }
+    .stCheckbox label div[data-testid="stMarkdownContainer"] {
         background-color: transparent !important;
     }
     /* Checkbox box color when checked - multiple selectors for compatibility */
@@ -71,6 +77,9 @@ st.markdown(
         border-color: #c946ff !important;
     }
     [data-testid="stCheckbox"] label div {
+        background-color: transparent !important;
+    }
+    [data-testid="stCheckbox"] p {
         background-color: transparent !important;
     }
     /* Target only the checkbox square itself */
