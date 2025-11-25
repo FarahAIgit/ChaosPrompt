@@ -343,7 +343,7 @@ with col2:
         st.markdown("**Your Generated Prompt** _(click the copy icon in the top-right corner):_")
         # Use st.code which has a built-in copy button
         st.code(st.session_state.prompt, language=None)
-
+st.markdown("Tip: Click the copy icon (top right of the prompt box) to copy your prompt.", unsafe_allow_html=True)
 st.markdown("---")
 st.markdown(
     "Use of this generator is free but if you find it useful please consider donating a little; [Donate via Kofi](https://ko-fi.com/farahai)",
@@ -364,3 +364,4 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
