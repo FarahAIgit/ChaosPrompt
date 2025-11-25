@@ -333,7 +333,6 @@ with col1:
     if st.button("Generate Prompt"):
         st.session_state.prompt = make_prompt(person_mode, add_mj_params=add_mj, pure_chaos_mode=pure_chaos)
     st.markdown("---")
-    st.markdown("Tip: Click the copy icon (top right of the prompt box) to copy your prompt.", unsafe_allow_html=True)
     st.markdown(
     "Created by [@Farah_ai_](https://x.com/Farah_ai_)", unsafe_allow_html=True)
 
@@ -364,4 +363,5 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
