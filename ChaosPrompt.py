@@ -12,6 +12,15 @@ st.markdown(
     <style>
     body { background-color: #0d0d0f; color: #e8e6e3; font-family: 'Courier New', monospace; }
     .stApp { min-height: 100vh; }
+    /* Checkbox outline + checked mark color */
+[data-baseweb="checkbox"] > div:first-child {
+    border-color: #c946ff !important;
+}
+
+[data-baseweb="checkbox"] svg {
+    fill: #c946ff !important;
+}
+
     .stTextArea textarea { background: rgba(10,10,12,0.7); color: #e8e6e3; border: 1px solid #2f2f31; }
     .stButton>button { background-color:#252427; color:#f2f0ef; border-radius:8px; padding:8px 14px; }
     .block-container { padding: 1rem 2rem; }
@@ -363,5 +372,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 
