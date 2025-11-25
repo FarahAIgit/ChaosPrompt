@@ -10,11 +10,6 @@ st.set_page_config(page_title="Chaos Prompt Generator", layout="wide")
 st.markdown(
     """
     <style>
-    /* Override Streamlit's default primary color */
-    :root {
-        --primary-color: #a931e1;
-    }
-    
     body { background-color: #0d0d0f; color: #e8e6e3; font-family: 'Courier New', monospace; }
     .stApp { min-height: 100vh; }
     .stTextArea textarea { background: rgba(10,10,12,0.7); color: #e8e6e3; border: 1px solid #2f2f31; }
@@ -42,83 +37,6 @@ st.markdown(
     [data-testid="stCode"] code {
         white-space: pre-wrap !important;
         word-wrap: break-word !important;
-    }
-    /* Checkbox styling - Remove ALL backgrounds from text areas */
-    .stCheckbox {
-        background-color: transparent !important;
-    }
-    .stCheckbox * {
-        background-color: transparent !important;
-    }
-    .stCheckbox label {
-        background-color: transparent !important;
-    }
-    .stCheckbox label::before,
-    .stCheckbox label::after {
-        background-color: transparent !important;
-    }
-    .stCheckbox > label > div[data-testid="stMarkdownContainer"] {
-        background-color: transparent !important;
-    }
-    .stCheckbox > label > div[data-testid="stMarkdownContainer"] > p {
-        color: #e8e6e3 !important;
-        background-color: transparent !important;
-    }
-    .stCheckbox label span {
-        background-color: transparent !important;
-    }
-    .stCheckbox label div {
-        background-color: transparent !important;
-    }
-    [data-testid="stCheckbox"] p {
-        background-color: transparent !important;
-        color: #e8e6e3 !important;
-    }
-    [data-testid="stCheckbox"] label span {
-        background-color: transparent !important;
-    }
-    [data-testid="stCheckbox"] label div {
-        background-color: transparent !important;
-    }
-    
-    /* Now style ONLY the checkbox square itself with purple */
-    [data-baseweb="checkbox"] {
-        background-color: transparent !important;
-    }
-    [data-baseweb="checkbox"] > div:first-child {
-        border-color: #a931e1 !important;
-        background-color: transparent !important;
-    }
-    [data-baseweb="checkbox"] input:checked ~ div:first-child {
-        background-color: #c946ff !important;
-        border-color: #c946ff !important;
-    }
-    
-    /* Additional targeting for the checkbox box */
-    .stCheckbox > label > div[role="checkbox"] {
-        border-color: #a931e1 !important;
-        background-color: transparent !important;
-    }
-    .stCheckbox > label > div[role="checkbox"][aria-checked="true"] {
-        background-color: #c946ff !important;
-        border-color: #a931e1 !important;
-    }
-    
-    /* Target the orange outline/border on unchecked state */
-    [data-baseweb="checkbox"] > div {
-        border-color: #a931e1 !important;
-    }
-    .stCheckbox input[type="checkbox"] ~ div {
-        border-color: #a931e1 !important;
-    }
-    /* Remove any orange/default accent colors */
-    [data-baseweb="checkbox"] svg {
-        color: #c946ff !important;
-    }
-    /* Override focus states */
-    .stCheckbox input:focus ~ div {
-        border-color: #a931e1 !important;
-        box-shadow: 0 0 0 0.2rem rgba(201, 70, 255, 0.25) !important;
     }
     </style>
     """,
@@ -446,5 +364,3 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-
