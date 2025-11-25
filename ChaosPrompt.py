@@ -86,7 +86,7 @@ st.markdown(
         background-color: transparent !important;
     }
     [data-baseweb="checkbox"] > div:first-child {
-        border-color: #c946ff !important;
+        border-color: #a931e1 !important;
         background-color: transparent !important;
     }
     [data-baseweb="checkbox"] input:checked ~ div:first-child {
@@ -96,20 +96,20 @@ st.markdown(
     
     /* Additional targeting for the checkbox box */
     .stCheckbox > label > div[role="checkbox"] {
-        border-color: #c946ff !important;
+        border-color: #a931e1 !important;
         background-color: transparent !important;
     }
     .stCheckbox > label > div[role="checkbox"][aria-checked="true"] {
         background-color: #c946ff !important;
-        border-color: #c946ff !important;
+        border-color: #a931e1 !important;
     }
     
     /* Target the orange outline/border on unchecked state */
     [data-baseweb="checkbox"] > div {
-        border-color: #c946ff !important;
+        border-color: #a931e1 !important;
     }
     .stCheckbox input[type="checkbox"] ~ div {
-        border-color: #c946ff !important;
+        border-color: #a931e1 !important;
     }
     /* Remove any orange/default accent colors */
     [data-baseweb="checkbox"] svg {
@@ -117,7 +117,7 @@ st.markdown(
     }
     /* Override focus states */
     .stCheckbox input:focus ~ div {
-        border-color: #c946ff !important;
+        border-color: #a931e1 !important;
         box-shadow: 0 0 0 0.2rem rgba(201, 70, 255, 0.25) !important;
     }
     </style>
@@ -446,4 +446,5 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
