@@ -39,11 +39,21 @@ st.markdown(
         word-wrap: break-word !important;
     }
     /* Change checkbox color to purple when checked */
-    .stCheckbox input[type="checkbox"]:checked + div {
-        background-color: #c946ff !important;
-    }
     .stCheckbox input[type="checkbox"]:checked {
         background-color: #c946ff !important;
+        border-color: #c946ff !important;
+    }
+    /* Target the checkbox icon/checkmark container */
+    .stCheckbox [data-testid="stCheckbox"] input:checked ~ span {
+        background-color: #c946ff !important;
+        border-color: #c946ff !important;
+    }
+    /* Remove any background from labels */
+    .stCheckbox label {
+        background-color: transparent !important;
+    }
+    .stCheckbox span {
+        background-color: transparent !important;
     }
     </style>
     """,
